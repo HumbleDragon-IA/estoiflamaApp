@@ -1,0 +1,32 @@
+@import "tailwindcss";
+
+/* Light (por defecto) */
+:root {
+  --background: theme(colors.stone.100);
+  --foreground: theme(colors.stone.800);
+  --border: none;
+
+  /* la fuente se inyecta desde next/font como --font-sans */
+  --font-sans: ui-sans-serif, system-ui, sans-serif;
+}
+
+/* Mapear tokens a Tailwind */
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-border: var(--border);
+  --font-sans: var(--font-sans);
+}
+
+/* Dark por CLASE .dark (no por media) */
+:root.dark {
+  --background: theme(colors.stone.950);
+  --foreground: theme(colors.stone.100);
+  --border: none;
+}
+
+/* Resets mínimos */
+html,
+body {
+  height: 100%;
+}
