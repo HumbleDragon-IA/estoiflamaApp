@@ -1,3 +1,4 @@
+"use client";
 import { generateTableData } from "../_lib/auxiliar";
 import TableHeaders from "./TableHeaders";
 import TableRow from "./TableRow";
