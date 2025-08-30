@@ -1,9 +1,20 @@
+import Tabla from "../_components/Tabla";
+import { auth } from "../_lib/auth";
+import { getVentas } from "../_lib/data-service";
+
 export const metadata = {
   title: "Ventas",
 };
 
-function page() {
-  return <div>ventas</div>;
+async function page() {
+  const session = await auth();
+  const ventas = await getVentas();
+  return (
+    <div>
+      ventas
+      <Tabla data={ventas} nombreTabla={"Ventas"}></Tabla>
+    </div>
+  );
 }
 
 export default page;

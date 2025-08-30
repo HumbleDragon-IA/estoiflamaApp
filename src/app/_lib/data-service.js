@@ -10,7 +10,7 @@ export async function getUser(email) {
     .select("*")
     .eq("email", email)
     .single();
-  console.log(data, "ENTRE EN GET USER");
+
   // No error here! We handle the possibility of no guest in the sign in callback
   return data;
 }
@@ -19,7 +19,7 @@ export async function getImpresionbyId(id) {
   const { data, error } = await supabase
     .from("impresiones")
     .select(
-      "id, tiempoImpresion, cantidadesPorImpresion, modeloId, modelos: modelos(categoriaId,nombre ,categoria:categoriaModelos(id, nombre)), materialesUtilizados:tableDetalleGastoFilamento(id,filamentoId,modelo, filamento: insumos(id, codigo, nombre,caracteristica,unidadMedida, proveedorId, marcaId, categoriaId,categoria:categoriaDeInsumos(id, nombre) ,proveedor:proveedor(id, razonSocial),marca: marcaDeInsumos(id,nombre))) "
+      "id,modelo: modelos(categoriaId,nombreModelo ,categoria:categoriaModelos( nombreCategoriaModelo)) , tiempoImpresion, cantidadesPorImpresion, modeloId, tamañoId,calidadId, tamaño:tamañoEnum( tamaño) , calidad: calidadEnum( calidad)"
     )
     .eq("id", id)
     .single();
@@ -35,7 +35,7 @@ export async function getImpresionbyModeloId(modeloId) {
   const { data, error } = await supabase
     .from("impresiones")
     .select(
-      "id, tiempoImpresion, cantidadesPorImpresion, modeloId, modelos: modelos(categoriaId,nombre ,categoria:categoriaModelos(id, nombre)), materialesUtilizados:tableDetalleGastoFilamento(id,filamentoId,modelo, filamento: insumos(id, codigo, nombre,caracteristica,unidadMedida, proveedorId, marcaId, categoriaId,categoria:categoriaDeInsumos(id, nombre) ,proveedor:proveedor(id, razonSocial),marca: marcaDeInsumos(id,nombre))) "
+      "id,modelo: modelos(categoriaId,nombreModelo ,categoria:categoriaModelos( nombreCategoriaModelo)) , tiempoImpresion, cantidadesPorImpresion, modeloId, tamañoId,calidadId, tamaño:tamañoEnum( tamaño) , calidad: calidadEnum( calidad)"
     )
     .eq("modeloId", modeloId)
     .single();
@@ -51,22 +51,49 @@ export const getImpresiones = async function () {
   const { data, error } = await supabase
     .from("impresiones")
     .select(
-      "id, tiempoImpresion, cantidadesPorImpresion, modeloId, modelos: modelos(categoriaId,nombre ,categoria:categoriaModelos(id, nombre)), materialesUtilizados:tableDetalleGastoFilamento(id,filamentoId,modelo, filamento: insumos(id, codigo, nombre,caracteristica,unidadMedida, proveedorId, marcaId, categoriaId,categoria:categoriaDeInsumos(id, nombre) ,proveedor:proveedor(id, razonSocial),marca: marcaDeInsumos(id,nombre)))  "
+      "id,modelo: modelos(categoriaId,nombreModelo ,categoria:categoriaModelos( nombreCategoriaModelo)) , tiempoImpresion, cantidadesPorImpresion, modeloId, tamañoId,calidadId, tamaño:tamañoEnum( tamaño) , calidad: calidadEnum( calidad)"
+      //  modelo: modelos(categoriaId,nombre ,categoria:categoriaModelos(id, nombre)), materialesUtilizados:tableDetalleGastoFilamento(id,filamentoId,modelo, filamento: insumos(id, codigo, nombre,caracteristica,unidadMedida, proveedorId, marcaId, categoriaId,categoria:categoriaDeInsumos(id, nombre) ,proveedor:proveedor(id, razonSocial),marca: marcaDeInsumos(id,nombre)))  "
     )
     .order("id");
 
   if (error) {
-    console.error(error);
+    console.error(error.message);
     throw new Error("Cabins could not be loaded");
   }
-  console.log(JSON.stringify(data, null, 2));
+  // console.log(JSON.stringify(data, null, 4), "QONDA ACA");
+  return data;
+};
+
+export const getVentas = async function () {
+  const { data, error } = await supabase
+    .from("ventas")
+    .select(
+      "id, clienteId, impresionId, cantidad, precioUnitarioSugerido, precioUnitarioFinal, precioTotalVenta, fechaEntrega, observaciones, cliente:clientes(nombreCompleto), impresion:impresiones(modelo:modelos(nombreModelo), tamaño:tamañoEnum(tamaño), calidad:calidadEnum(calidad))"
+    )
+    .order("id");
+
+  return data;
+};
+
+export const getComprasInsumos = async function () {
+  const { data, error } = await supabase
+    .from("comprasInsumos")
+    .select(
+      "id, cantidad, precioUnitario, descuento,total, numeroFactura, fechaCompra, insumoId, insumos(nombreInsumo, unidadMedida, caracteristica, stock, categoriaInsumo:categoriaDeInsumos(nombreCategoriaInsumo), marcaInsumo:marcaDeInsumos(nombreMarcaDeInsumo))"
+    )
+    .order("id");
+
+  if (error) {
+    console.error(error.message);
+    throw new Error("compras could not be loaded");
+  }
   return data;
 };
 
 //POST
 // getImpresiones();
-// console.log("hola");
-// getImpresionbyModeloId(1);
+// // console.log("hola");
+// // getImpresionbyModeloId(1);
 // getImpresionbyId(2);
 // getImpresionbyId(3);
 
@@ -86,12 +113,12 @@ export async function createDetalleGastos(detalleGastos) {
   const { data, error } = await supabase
     .from("tableDetalleGastoFilamento")
     .insert(detalleGastos);
-
+  console.log(error);
   if (error) {
     console.error(error.message);
     throw new Error("Guest could not be created");
   }
-  console.log(data);
+  console.log(data, "LA DATA ES");
   return data;
 }
 
@@ -115,3 +142,13 @@ export async function createDetalleGastos(detalleGastos) {
 // ];
 
 // createDetalleGastos(detalleGastos);
+
+// const newImpresion = {
+//   tiempoImpresion: 6,
+//   cantidadesPorImpresion: 1,
+//   modeloId: 5,
+//   tamañoId: 2,
+//   calidadId: 2,
+// };
+
+// createImpresion(newImpresion);
