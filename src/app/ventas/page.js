@@ -11,7 +11,6 @@ async function page() {
   const ventas = await getVentas();
   return (
     <div>
-      ventas
       <Tabla data={ventas} nombreTabla={"Ventas"}></Tabla>
     </div>
   );

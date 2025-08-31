@@ -12,3 +12,5 @@ export async function signInAction() {
 export async function signOutAction() {
   await signOut({ redirectTo: "/" });
 }
+
+export async function createImpresionAction(formData) {}

@@ -19,7 +19,7 @@ export async function getImpresionbyId(id) {
   const { data, error } = await supabase
     .from("impresiones")
     .select(
-      "id,modelo: modelos(categoriaId,nombreModelo ,categoria:categoriaModelos( nombreCategoriaModelo)) , tiempoImpresion, cantidadesPorImpresion, modeloId, tamañoId,calidadId, tamaño:tamañoEnum( tamaño) , calidad: calidadEnum( calidad)"
+      "id,modelo: modelos(categoriaId,nombre_modelo ,categoria:categoria_modelos( nombre_categoria_modelo)) , tiempo_impresion, cantidades_por_impresion, modeloId, tamañoId,calidadId, tamaño:tamaño_enum( tamaño) , calidad: calidad_enum( calidad)"
     )
     .eq("id", id)
     .single();
@@ -35,7 +35,7 @@ export async function getImpresionbyModeloId(modeloId) {
   const { data, error } = await supabase
     .from("impresiones")
     .select(
-      "id,modelo: modelos(categoriaId,nombreModelo ,categoria:categoriaModelos( nombreCategoriaModelo)) , tiempoImpresion, cantidadesPorImpresion, modeloId, tamañoId,calidadId, tamaño:tamañoEnum( tamaño) , calidad: calidadEnum( calidad)"
+      "id,modelo: modelos(categoriaId,nombre_modelo ,categoria:categoria_modelos( nombre_categoria_modelo)) , tiempo_impresion, cantidades_por_impresion, modeloId, tamañoId,calidadId, tamaño:tamaño_enum( tamaño) , calidad: calidad_enum( calidad)"
     )
     .eq("modeloId", modeloId)
     .single();
@@ -51,7 +51,7 @@ export const getImpresiones = async function () {
   const { data, error } = await supabase
     .from("impresiones")
     .select(
-      "id,modelo: modelos(categoriaId,nombreModelo ,categoria:categoriaModelos( nombreCategoriaModelo)) , tiempoImpresion, cantidadesPorImpresion, modeloId, tamañoId,calidadId, tamaño:tamañoEnum( tamaño) , calidad: calidadEnum( calidad)"
+      "modelo: modelos(categoriaId,nombre_modelo ,categoria:categoria_modelos( nombre_categoria_modelo)) ,id, tiempo_impresion, cantidades_por_impresion, modeloId, tamañoId,calidadId, tamaño:tamaño_enum( tamaño) , calidad: calidad_enum( calidad)"
       //  modelo: modelos(categoriaId,nombre ,categoria:categoriaModelos(id, nombre)), materialesUtilizados:tableDetalleGastoFilamento(id,filamentoId,modelo, filamento: insumos(id, codigo, nombre,caracteristica,unidadMedida, proveedorId, marcaId, categoriaId,categoria:categoriaDeInsumos(id, nombre) ,proveedor:proveedor(id, razonSocial),marca: marcaDeInsumos(id,nombre)))  "
     )
     .order("id");
@@ -68,18 +68,36 @@ export const getVentas = async function () {
   const { data, error } = await supabase
     .from("ventas")
     .select(
-      "id, clienteId, impresionId, cantidad, precioUnitarioSugerido, precioUnitarioFinal, precioTotalVenta, fechaEntrega, observaciones, cliente:clientes(nombreCompleto), impresion:impresiones(modelo:modelos(nombreModelo), tamaño:tamañoEnum(tamaño), calidad:calidadEnum(calidad))"
+      "id, clienteId, impresionId, cantidad, precio_unitario_sugerido, precio_unitario_final, precio_total_venta, fecha_entrega, observaciones, cliente:clientes(nombre_cliente), impresion:impresiones(modelo:modelos(nombre_modelo), tamaño:tamaño_enum(tamaño), calidad:calidad_enum(calidad))"
     )
     .order("id");
-
+  if (error) {
+    console.error(error.message);
+    throw new Error("Ventas could not be loaded");
+  }
   return data;
 };
 
 export const getComprasInsumos = async function () {
   const { data, error } = await supabase
-    .from("comprasInsumos")
+    .from("compras_insumos")
     .select(
-      "id, cantidad, precioUnitario, descuento,total, numeroFactura, fechaCompra, insumoId, insumos(nombreInsumo, unidadMedida, caracteristica, stock, categoriaInsumo:categoriaDeInsumos(nombreCategoriaInsumo), marcaInsumo:marcaDeInsumos(nombreMarcaDeInsumo))"
+      "id, cantidad, precio_unitario, descuento,total, numero_factura, fecha_compra, insumoId, insumos(nombre_insumo, unidad_medida, caracteristica,  categoria_insumo:categoria_de_insumos(nombre_categoria_insumo), marca_insumo:marca_de_insumos(nombre_marca_insumo))"
+    )
+    .order("id");
+
+  if (error) {
+    console.error(error.message);
+    throw new Error("compras could not be loaded");
+  }
+  return data;
+};
+
+export const getStocks = async function () {
+  const { data, error } = await supabase
+    .from("insumos")
+    .select(
+      "id, caracteristica, stock, proveedorId, marcaId, categoriaId, codigo_insumo, nombre_insumo"
     )
     .order("id");
 

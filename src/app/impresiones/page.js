@@ -1,3 +1,4 @@
+import ActionButton from "../_components/ActionButton";
 import Tabla from "../_components/Tabla";
 import { auth } from "../_lib/auth";
 import { getImpresiones } from "../_lib/data-service";
@@ -12,7 +13,6 @@ async function page() {
   if (session?.user) {
     return (
       <div>
-        Impresiones
         <Tabla data={impresiones} nombreTabla="Impresiones"></Tabla>
       </div>
     );

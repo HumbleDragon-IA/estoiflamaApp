@@ -13,7 +13,6 @@ async function page() {
 
   return (
     <div>
-      Compras
       <Tabla data={compras} nombreTabla={"Compras Insumos"}></Tabla>
     </div>
   );
