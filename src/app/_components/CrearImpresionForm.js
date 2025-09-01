@@ -2,8 +2,6 @@
 import ActionButton from "./ActionButton";
 import { createImpresionAction } from "../_lib/actions";
 import { useActionState, useEffect, useState } from "react";
-import Modal from "./Modal";
-import CrearModeloForm from "./CrearModeloForm";
 
 const initialState = { ok: false, error: null };
 

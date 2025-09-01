@@ -13,19 +13,21 @@ function Tabla({ data, nombreTabla, extraData }) {
   const [open, setOpen] = useState(false);
 
   return (
-    <div className="grid min-w-dvh grid-rows-[auto_1fr_auto] gap-4 bg-background text-foreground font-sans antialiased">
-      <div className="flex flex-row justify-between items-center">
-        <h2 className="text-sm">Tabla de {nombreTabla}</h2>
-        {nombreTabla === "Impresiones" && !open && (
-          <ActionButton onClick={() => setOpen(true)} type="primary">
-            Registrar Impresion
-          </ActionButton>
-        )}
-        {nombreTabla === "Modelos" && !open && (
-          <ActionButton onClick={() => setOpen(true)} type="primary">
-            Agregar Modelo
-          </ActionButton>
-        )}
+    <div className="grid min-w-dvh grid-rows-[auto_1fr_auto] gap-4 bg-background text-foreground font-sans antialiased w-xl md:w-2xl lg:w-4xl xl:w-6xl">
+      <div className="flex flex-row justify-between items-center w-xl md:w-2xl lg:w-4xl xl:w-6xl mb-2">
+        <h2 className="text-sm lg:text-lg">Tabla de {nombreTabla}</h2>
+        <div className="bg-red-50">
+          {nombreTabla === "Impresiones" && !open && (
+            <ActionButton onClick={() => setOpen(true)} type="primary">
+              Registrar Impresion
+            </ActionButton>
+          )}
+          {nombreTabla === "Modelos" && !open && (
+            <ActionButton onClick={() => setOpen(true)} type="primary">
+              Agregar Modelo
+            </ActionButton>
+          )}
+        </div>
       </div>
       {nombreTabla === "Impresiones" && open && (
         <Modal
@@ -55,11 +57,11 @@ function Tabla({ data, nombreTabla, extraData }) {
         </Modal>
       )}
       <table
-        className={`table-auto border-spacing-3 rounded-xl border-stone-300 border-collapse border-2 w-7xl ${
+        className={`table-auto border-spacing-3  border-stone-300 border-collapse border-2 w-xl md:w-2xl lg:w-4xl xl:w-6xl ${
           open && "hidden"
         }`}
       >
-        <thead className="border-b-2">
+        <thead className="border-b-2 ">
           <TableHeaders headers={headers}></TableHeaders>
         </thead>
         <tbody>
