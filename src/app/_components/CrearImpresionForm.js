@@ -1,7 +1,9 @@
 "use client";
 import ActionButton from "./ActionButton";
 import { createImpresionAction } from "../_lib/actions";
-import { useActionState, useEffect } from "react";
+import { useActionState, useEffect, useState } from "react";
+import Modal from "./Modal";
+import CrearModeloForm from "./CrearModeloForm";
 
 const initialState = { ok: false, error: null };
 
@@ -11,6 +13,7 @@ function CrearImpresionForm({ open, onClose, extraData }) {
     initialState
   );
   const [modelos, calidades, tamaños, pedidos] = extraData;
+
   useEffect(() => {
     if (state.ok) onClose();
   }, [state.ok, onClose]);
@@ -42,7 +45,7 @@ function CrearImpresionForm({ open, onClose, extraData }) {
             — Elegí —
           </option>
           {modelos.map((m) => (
-            <option key={m.id} value={m.id}>
+            <option key={m.id + m.nombre_modelo} value={m.id}>
               {m.nombre_modelo}
             </option>
           ))}
@@ -63,7 +66,7 @@ function CrearImpresionForm({ open, onClose, extraData }) {
             — Elegí —
           </option>
           {tamaños.map((t) => (
-            <option key={t.id} value={t.id}>
+            <option key={t.id + t.tamaño} value={t.id}>
               {t.tamaño}
             </option>
           ))}
@@ -84,7 +87,7 @@ function CrearImpresionForm({ open, onClose, extraData }) {
             — Elegí —
           </option>
           {calidades.map((c) => (
-            <option key={c.id} value={c.id}>
+            <option key={c.id + c.calidad} value={c.id}>
               {c.calidad}
             </option>
           ))}
@@ -102,7 +105,7 @@ function CrearImpresionForm({ open, onClose, extraData }) {
         >
           <option value="0">No tiene</option>
           {pedidos.map((p) => (
-            <option key={p} value={p}>
+            <option key={p?.id} value={p}>
               {p}
             </option>
           ))}

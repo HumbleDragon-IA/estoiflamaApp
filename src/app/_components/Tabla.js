@@ -6,6 +6,7 @@ import TableHeaders from "./TableHeaders";
 import TableRow from "./TableRow";
 import CrearImpresionForm from "./CrearImpresionForm";
 import Modal from "./Modal";
+import CrearModeloForm from "./CrearModeloForm";
 
 function Tabla({ data, nombreTabla, extraData }) {
   const { headers3: headers, row2: rows } = generateTableData(data);
@@ -15,9 +16,14 @@ function Tabla({ data, nombreTabla, extraData }) {
     <div className="grid min-w-dvh grid-rows-[auto_1fr_auto] gap-4 bg-background text-foreground font-sans antialiased">
       <div className="flex flex-row justify-between items-center">
         <h2 className="text-sm">Tabla de {nombreTabla}</h2>
-        {!open && (
+        {nombreTabla === "Impresiones" && !open && (
           <ActionButton onClick={() => setOpen(true)} type="primary">
             Registrar Impresion
+          </ActionButton>
+        )}
+        {nombreTabla === "Modelos" && !open && (
+          <ActionButton onClick={() => setOpen(true)} type="primary">
+            Agregar Modelo
           </ActionButton>
         )}
       </div>
@@ -32,6 +38,20 @@ function Tabla({ data, nombreTabla, extraData }) {
             open={open}
             onClose={() => setOpen(false)}
           ></CrearImpresionForm>
+        </Modal>
+      )}
+
+      {nombreTabla === "Modelos" && open && (
+        <Modal
+          open={open}
+          title={"Registrar Modelo"}
+          onClose={() => setOpen(false)}
+        >
+          <CrearModeloForm
+            extraData={extraData}
+            open={open}
+            onClose={() => setOpen(false)}
+          ></CrearModeloForm>
         </Modal>
       )}
       <table

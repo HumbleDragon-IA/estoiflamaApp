@@ -112,7 +112,7 @@ export const getModelos = async function () {
   const { data, error } = await supabase
     .from("modelos")
     .select(
-      "id, nombre_modelo, categoriaId, categoria_modelo:categoria_modelos(nombre_categoria_modelo)"
+      "id, nombre_modelo, categoriaId, categoria:categoria_modelos(nombre_categoria_modelo)"
     )
     .order("id");
 
@@ -120,7 +120,7 @@ export const getModelos = async function () {
     console.error(error.message);
     throw new Error("Modelos could not be loaded");
   }
-  // console.log(data, "en server");
+  console.log(data, "en server");
   return data;
 };
 export const getTamañosModelos = async function () {
@@ -146,6 +146,20 @@ export const getCalidadesModelos = async function () {
   if (error) {
     console.error(error.message);
     throw new Error("calidades could not be loaded");
+  }
+  // console.log(data, "en server");
+  return data;
+};
+
+export const getCategoriasModelos = async function () {
+  const { data, error } = await supabase
+    .from("categoria_modelos")
+    .select("id, nombre_categoria_modelo")
+    .order("id");
+
+  if (error) {
+    console.error(error.message);
+    throw new Error("Categorias Modelos could not be loaded");
   }
   // console.log(data, "en server");
   return data;
@@ -179,11 +193,22 @@ export async function createImpresion(newImpresion) {
   console.log(newImpresion, " aver como viene");
   if (error) {
     console.error(error.message);
-    throw new Error("Guest could not be created");
+    throw new Error("Impresion could not be created");
   }
   console.log(data);
   return data;
 }
+export async function createModelo(newModelo) {
+  const { data, error } = await supabase.from("modelos").insert([newModelo]);
+  console.log(newModelo, " aver como viene el modelo en data services");
+  if (error) {
+    console.error(error.message);
+    throw new Error("Modelo could not be created");
+  }
+  console.log(data, "modelo en service");
+  return data;
+}
+
 export async function createDetalleGastos(detalleGastos) {
   const { data, error } = await supabase
     .from("tableDetalleGastoFilamento")
@@ -196,34 +221,3 @@ export async function createDetalleGastos(detalleGastos) {
   console.log(data, "LA DATA ES");
   return data;
 }
-
-// const detalleGastos = [
-//   {
-//     modelo: 40,
-//     soporte: 0,
-//     expulsado: 0,
-//     torre: 0,
-//     filamentoId: 5,
-//     impresionId: 2,
-//   },
-//   {
-//     modelo: 40,
-//     soporte: 0,
-//     expulsado: 0,
-//     torre: 0,
-//     filamentoId: 1,
-//     impresionId: 2,
-//   },
-// ];
-
-// createDetalleGastos(detalleGastos);
-
-// const newImpresion = {
-//   tiempoImpresion: 6,
-//   cantidadesPorImpresion: 1,
-//   modeloId: 5,
-//   tamañoId: 2,
-//   calidadId: 2,
-// };
-
-// createImpresion(newImpresion);

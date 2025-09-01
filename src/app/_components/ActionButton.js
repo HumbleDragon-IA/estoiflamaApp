@@ -16,6 +16,7 @@ function ActionButton({ children, type, onClick, isSubmit }) {
   } text-sm p-2 rounded-full shadow-md`;
 
   function handleAction(e) {
+    console.log(e, "ACA?");
     e.preventDefault();
     onClick?.(); // por si no viene definido
   }
