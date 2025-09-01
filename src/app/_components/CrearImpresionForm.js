@@ -21,7 +21,7 @@ function CrearImpresionForm({ open, onClose, extraData }) {
   return (
     <form
       action={formAction}
-      className="bg-stone-600 py-8 px-12 text-lg flex gap-6 flex-col w-md sm:w-lg md:w-2xl lg:w-4xl xl:w-7xl  rounded-2xl shadow-lg shadow-stone-800 text-white"
+      className="bg-stone-600 py-8 px-12 text-lg flex gap-6 flex-col max-w-full rounded-2xl shadow-lg shadow-stone-800 text-white"
     >
       {state.error && (
         <p className="rounded-md bg-red-600/20 border border-red-600 px-3 py-2 text-red-200">
@@ -30,13 +30,13 @@ function CrearImpresionForm({ open, onClose, extraData }) {
       )}
 
       {/* MODELO */}
-      <div className="space-y-2 flex flex-col w-xs">
+      <div className="space-y-2 flex flex-col max-w-full">
         <label htmlFor="modelo">Selecciona el modelo</label>
         <select
           id="modelo"
           name="modelo"
           defaultValue=""
-          className="w-3xs py-2 shadow-lg shadow-stone-800 text-stone-800"
+          className="max-w-full py-2 shadow-lg shadow-stone-800 text-stone-800"
           required
         >
           <option value="" disabled>
@@ -51,13 +51,13 @@ function CrearImpresionForm({ open, onClose, extraData }) {
       </div>
 
       {/* TAMAÑO */}
-      <div className="space-y-2 flex flex-col w-xs">
+      <div className="space-y-2 flex flex-col max-w-full">
         <label htmlFor="tamaño">Selecciona el Tamaño</label>
         <select
           id="tamaño"
           name="tamaño"
           defaultValue=""
-          className="w-3xs py-2 shadow-lg shadow-stone-800 text-stone-800"
+          className="max-w-full py-2 shadow-lg shadow-stone-800 text-stone-800"
           required
         >
           <option value="" disabled>
@@ -72,13 +72,13 @@ function CrearImpresionForm({ open, onClose, extraData }) {
       </div>
 
       {/* CALIDAD */}
-      <div className="space-y-2 flex flex-col w-xs">
+      <div className="space-y-2 flex flex-col max-w-full">
         <label htmlFor="calidad">Selecciona la calidad</label>
         <select
           id="calidad"
           name="calidad"
           defaultValue=""
-          className="w-3xs py-2 shadow-lg shadow-stone-800 text-stone-800"
+          className="max-w-full py-2 shadow-lg shadow-stone-800 text-stone-800"
           required
         >
           <option value="" disabled>
@@ -93,13 +93,13 @@ function CrearImpresionForm({ open, onClose, extraData }) {
       </div>
 
       {/* PEDIDO */}
-      <div className="space-y-2 flex flex-col w-xs">
+      <div className="space-y-2 flex flex-col max-w-full">
         <label htmlFor="pedido">Pedido Relacionado</label>
         <select
           id="pedido"
           name="pedido"
           defaultValue="0"
-          className="w-3xs py-2 shadow-lg shadow-stone-800 text-stone-800"
+          className="max-w-full py-2 shadow-lg shadow-stone-800 text-stone-800"
         >
           <option value="0">No tiene</option>
           {pedidos.map((p) => (
@@ -111,7 +111,7 @@ function CrearImpresionForm({ open, onClose, extraData }) {
       </div>
 
       {/* CANTIDAD */}
-      <div className="space-y-2 flex flex-col w-xs">
+      <div className="space-y-2 flex flex-col max-w-full">
         <label htmlFor="cantidad">Ingrese cantidad de modelos a imprimir</label>
         <input
           id="cantidad"
@@ -119,13 +119,13 @@ function CrearImpresionForm({ open, onClose, extraData }) {
           type="number"
           defaultValue={0}
           min={0}
-          className="bg-stone-200 text-stone-700 w-3xs py-2 px-3 rounded-2xl shadow-lg shadow-stone-800"
+          className="bg-stone-200 text-stone-700 max-w-full py-2 px-3 rounded-2xl shadow-lg shadow-stone-800"
           required
         />
       </div>
 
       {/* TIEMPO */}
-      <div className="space-y-2 flex flex-col w-xs">
+      <div className="space-y-2 flex flex-col max-w-full">
         <label htmlFor="tiempo_impresion">
           Ingrese (en minutos) la duración total
         </label>
@@ -135,12 +135,12 @@ function CrearImpresionForm({ open, onClose, extraData }) {
           type="number"
           defaultValue={0}
           min={0}
-          className="bg-stone-200 text-stone-700 w-3xs py-2 px-3 rounded-2xl shadow-lg shadow-stone-800"
+          className="bg-stone-200 text-stone-700 max-w-full py-2 px-3 rounded-2xl shadow-lg shadow-stone-800"
           required
         />
       </div>
 
-      <div className="flex justify-end gap-4 pt-4 w-sm">
+      <div className="flex justify-end gap-4 pt-4 max-w-full">
         <ActionButton type="cancel" onClick={onClose}>
           Cancelar
         </ActionButton>

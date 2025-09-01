@@ -23,7 +23,7 @@ export default function Modal({ open, title, onClose, children }) {
       <div
         role="dialog"
         aria-modal="true"
-        className="absolute left-1/2 top-1/2 max-w-2xl  -translate-x-1/2 -translate-y-1/2
+        className="absolute left-1/2 top-1/2  -translate-x-1/2 -translate-y-1/2
                    rounded-2xl bg-stone-700 p-6 shadow-2xl w-md sm:w-lg md:w-2xl lg:w-4xl xl:w-6xl "
       >
         {title && (
