@@ -6,7 +6,7 @@ export const metadata = {
 };
 
 function page() {
-  return <div>Stocks</div>;
+  return <div className="min-w-full max-w-dvw ">Stocks</div>;
 }
 
 export default page;

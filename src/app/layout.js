@@ -3,6 +3,7 @@ import Script from "next/script";
 import "./_styles/globals.css";
 import Header from "./_components/Header";
 import Footer from "./_components/Footer";
+import { auth } from "./_lib/auth";
 
 const josefin = Josefin_Sans({
   subsets: ["latin"],
@@ -20,7 +21,8 @@ export const metadata = {
 
 export const viewport = { width: "device-width", initialScale: 1 };
 
-export default function RootLayout({ children }) {
+export default async function RootLayout({ children }) {
+  const session = await auth();
   return (
     <html lang="es" suppressHydrationWarning>
       {/* Script externo, corre ANTES de hidratar */}
@@ -33,7 +35,11 @@ export default function RootLayout({ children }) {
         bg-background text-foreground font-sans antialiased  `}
       >
         <Header />
-        <main className="container mx-auto max-w-dvw  min-w-full sm:px-6 lg:px-4 py-6  ">
+        <main
+          className={`container mx-auto max-w-dvw min-h-full max-h-dvh min-w-full sm:px-6 lg:px-4 ${
+            session?.user ? "py-6" : ""
+          } `}
+        >
           {children}
         </main>
         <Footer />

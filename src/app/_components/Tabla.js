@@ -16,7 +16,7 @@ function Tabla({ data, nombreTabla, extraData }) {
     <div className="flex flex-col items-center mx-auto px-1 justify-between gap-4 bg-background text-foreground font-sans antialiased min-w-full max-w-dvw  ">
       <div className="flex flex-row justify-between items-center mx-auto min-w-full  max-w-dvw  mb-2 ">
         <h2 className="text-sm lg:text-lg">Tabla de {nombreTabla}</h2>
-        <div className="bg-red-50">
+        <div className="">
           {nombreTabla === "Impresiones" && !open && (
             <ActionButton onClick={() => setOpen(true)} type="primary">
               Registrar Impresion

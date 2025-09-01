@@ -23,7 +23,7 @@ async function page() {
   const extraData = [modelos, calidades, tamaños, pedidos];
   if (session?.user) {
     return (
-      <div>
+      <div className="min-w-full max-w-dvw">
         <Tabla
           data={impresiones}
           extraData={extraData}

@@ -13,7 +13,7 @@ async function page() {
   const extraData = [categoriasModelos];
   if (!session?.user) return null;
   return (
-    <div>
+    <div className="min-w-full max-w-dvw">
       <Tabla nombreTabla="Modelos" data={modelos} extraData={extraData}></Tabla>
     </div>
   );

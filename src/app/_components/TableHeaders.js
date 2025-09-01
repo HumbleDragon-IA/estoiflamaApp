@@ -3,7 +3,7 @@ import TableData from "./TableData";
 
 function TableHeaders({ headers }) {
   return (
-    <tr className="font-bold ">
+    <tr className="font-bold max-w-dvw  min-w-full ">
       {headers.map((header, i) => {
         if (header !== "id" && header.slice(-2) !== "Id") {
           // console.log(header);
