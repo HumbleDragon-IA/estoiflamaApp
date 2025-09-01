@@ -108,6 +108,63 @@ export const getStocks = async function () {
   return data;
 };
 
+export const getModelos = async function () {
+  const { data, error } = await supabase
+    .from("modelos")
+    .select(
+      "id, nombre_modelo, categoriaId, categoria_modelo:categoria_modelos(nombre_categoria_modelo)"
+    )
+    .order("id");
+
+  if (error) {
+    console.error(error.message);
+    throw new Error("Modelos could not be loaded");
+  }
+  // console.log(data, "en server");
+  return data;
+};
+export const getTamañosModelos = async function () {
+  const { data, error } = await supabase
+    .from("tamaño_enum")
+    .select("id, tamaño, coeficiente_tamaño")
+    .order("id");
+
+  if (error) {
+    console.error(error.message);
+    throw new Error("tamaños could not be loaded");
+  }
+  // console.log(data, "en server");
+  return data;
+};
+
+export const getCalidadesModelos = async function () {
+  const { data, error } = await supabase
+    .from("calidad_enum")
+    .select("id, calidad, coeficiente_calidad")
+    .order("id");
+
+  if (error) {
+    console.error(error.message);
+    throw new Error("calidades could not be loaded");
+  }
+  // console.log(data, "en server");
+  return data;
+};
+
+export const getPedidos = async function () {
+  const { data, error } = await supabase
+    .from("pedidos")
+    .select("id,modeloId, clienteId,calidadId,tamañoId")
+    .order("id");
+
+  if (error) {
+    console.error(error.message);
+    throw new Error("pedidos could not be loaded");
+  }
+  // console.log(data, "en server");
+  return data;
+};
+
 //POST
 // getImpresiones();
 // // console.log("hola");
@@ -119,7 +176,7 @@ export async function createImpresion(newImpresion) {
   const { data, error } = await supabase
     .from("impresiones")
     .insert([newImpresion]);
-
+  console.log(newImpresion, " aver como viene");
   if (error) {
     console.error(error.message);
     throw new Error("Guest could not be created");

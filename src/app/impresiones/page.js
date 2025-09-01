@@ -1,7 +1,13 @@
 import ActionButton from "../_components/ActionButton";
 import Tabla from "../_components/Tabla";
 import { auth } from "../_lib/auth";
-import { getImpresiones } from "../_lib/data-service";
+import {
+  getCalidadesModelos,
+  getImpresiones,
+  getModelos,
+  getPedidos,
+  getTamañosModelos,
+} from "../_lib/data-service";
 
 export const metadata = {
   title: "Impresiones",
@@ -10,10 +16,19 @@ export const metadata = {
 async function page() {
   const session = await auth();
   const impresiones = await getImpresiones();
+  const modelos = await getModelos();
+  const calidades = await getCalidadesModelos();
+  const tamaños = await getTamañosModelos();
+  const pedidos = await getPedidos();
+  const extraData = [modelos, calidades, tamaños, pedidos];
   if (session?.user) {
     return (
       <div>
-        <Tabla data={impresiones} nombreTabla="Impresiones"></Tabla>
+        <Tabla
+          data={impresiones}
+          extraData={extraData}
+          nombreTabla="Impresiones"
+        ></Tabla>
       </div>
     );
   } else {
