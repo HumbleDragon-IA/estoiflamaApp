@@ -20,7 +20,7 @@ function CrearModeloForm({ open, onClose, extraData }) {
   return (
     <form
       action={formAction}
-      className="bg-stone-600 py-8 px-12 text-lg flex gap-6 flex-col w-md rounded-2xl shadow-lg shadow-stone-800 text-white"
+      className="bg-stone-600 py-8 px-12 text-lg flex gap-6 max-w-full flex-col w-sm sm:w-md md:w-xl lg:w-2xl xl:w-5xl  rounded-2xl shadow-lg shadow-stone-800 text-white"
     >
       {state.error && (
         <p className="rounded-md bg-red-600/20 border border-red-600 px-3 py-2 text-red-200">
@@ -81,7 +81,7 @@ function CrearModeloForm({ open, onClose, extraData }) {
         </select>
       </div>
 
-      <div className="flex justify-end gap-4 pt-4 w-sm">
+      <div className="flex justify-end gap-4 pt-4 w-xs">
         <ActionButton type="cancel" onClick={onClose}>
           Cancelar
         </ActionButton>

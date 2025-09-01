@@ -13,8 +13,8 @@ function Tabla({ data, nombreTabla, extraData }) {
   const [open, setOpen] = useState(false);
 
   return (
-    <div className="flex flex-col items-center justify-between gap-4 bg-background text-foreground font-sans antialiased w-xl md:w-2xl lg:w-4xl xl:w-7xl ">
-      <div className="flex flex-row justify-between items-center  w-md sm:w-xl md:w-2xl lg:w-4xl xl:w-7xl mb-2 ">
+    <div className="flex flex-col items-center justify-between gap-4 bg-background text-foreground font-sans antialiased w-xl sm:w-xl md:w-2xl lg:w-4xl xl:w-7xl ">
+      <div className="flex flex-row justify-between items-center  w-md sm:w-lg md:w-2xl lg:w-4xl xl:w-7xl mb-2 ">
         <h2 className="text-sm lg:text-lg">Tabla de {nombreTabla}</h2>
         <div className="bg-red-50">
           {nombreTabla === "Impresiones" && !open && (
@@ -57,7 +57,7 @@ function Tabla({ data, nombreTabla, extraData }) {
         </Modal>
       )}
       <table
-        className={`table-auto border-spacing-3 mx-auto border-stone-300 border-collapse border-2 w-md sm:w-lg md:w-2xl lg:w-4xl xl:w-7xl ${
+        className={`table-auto border-spacing-3  mx-auto border-stone-300 border-collapse border-2 w-md sm:w-lg md:w-2xl lg:w-4xl xl:w-7xl ${
           open && "hidden"
         }`}
       >

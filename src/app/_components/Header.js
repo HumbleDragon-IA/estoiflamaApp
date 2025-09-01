@@ -9,7 +9,7 @@ async function Header() {
   const session = await auth();
 
   return (
-    <header className="bg-stone-900  text-stone-200 border-b border-border pt-[env(safe-area-inset-top)] ">
+    <header className="bg-stone-900  text-stone-200 border-b border-border pt-[env(safe-area-inset-top)]  ">
       <div className="container px-4 h-16 flex items-center justify-between    ">
         <Logo />
 

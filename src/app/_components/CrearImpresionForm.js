@@ -21,7 +21,7 @@ function CrearImpresionForm({ open, onClose, extraData }) {
   return (
     <form
       action={formAction}
-      className="bg-stone-600 py-8 px-12 text-lg flex gap-6 flex-col w-md rounded-2xl shadow-lg shadow-stone-800 text-white"
+      className="bg-stone-600 py-8 px-12 text-lg flex gap-6 flex-col w-md sm:w-lg md:w-2xl lg:w-4xl xl:w-7xl  rounded-2xl shadow-lg shadow-stone-800 text-white"
     >
       {state.error && (
         <p className="rounded-md bg-red-600/20 border border-red-600 px-3 py-2 text-red-200">
