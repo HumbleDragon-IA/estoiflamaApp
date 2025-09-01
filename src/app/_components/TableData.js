@@ -2,7 +2,7 @@ import { formatPrecio, replaceUnderscore } from "../_lib/auxiliar";
 
 function TableData({ children }) {
   return (
-    <td className="text-center capitalize px-2 py-4 text-sm">
+    <td className="text-center capitalize px-1 sm:px-2 md:px-3 lg:px-4 xl:px-6 py-4 text-xs sm:text-sm md:text-md ">
       {typeof children === "string"
         ? replaceUnderscore(children)
         : typeof children === "number" && children > 500

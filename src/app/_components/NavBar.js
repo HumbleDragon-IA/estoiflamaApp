@@ -42,12 +42,12 @@ function NavBar({ user }) {
   if (!user) return null;
 
   return (
-    <div className="relative w-full">
+    <div className="relative">
       {/* Botón mobile */}
       <button
         ref={btnRef}
         type="button"
-        className="lg:hidden p-2 rounded border text-sm border-zinc-300 dark:border-zinc-700"
+        className="md:hidden p-0.5 md:p-1.5  rounded border text-xs border-zinc-300 dark:border-zinc-700 "
         aria-expanded={open ? "true" : "false"}
         aria-controls="mobile-menu"
         onClick={() => setOpen((v) => !v)}

@@ -29,11 +29,11 @@ export default function RootLayout({ children }) {
       </head>
 
       <body
-        className={`${josefin.variable} min-h-dvh grid grid-rows-[auto_1fr_auto]
-        bg-background text-foreground font-sans antialiased`}
+        className={`${josefin.variable}   grid grid-rows-[auto_1fr_auto]
+        bg-background text-foreground font-sans antialiased  `}
       >
         <Header />
-        <main className="container mx-auto px-4  sm:px-6 lg:px-8 py-6 ">
+        <main className="container mx-auto min-w-dvw sm:px-6 lg:px-4 py-6 w-md sm:w-lg md:w-2xl lg:w-4xl xl:w-7xl  ">
           {children}
         </main>
         <Footer />
