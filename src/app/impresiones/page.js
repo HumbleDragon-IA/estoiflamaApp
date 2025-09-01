@@ -1,6 +1,6 @@
-import ActionButton from "../_components/ActionButton";
 import Tabla from "../_components/Tabla";
 import { auth } from "../_lib/auth";
+import { filterDataForImpresiones } from "../_lib/auxiliar";
 import {
   getCalidadesModelos,
   getImpresiones,
@@ -20,12 +20,14 @@ async function page() {
   const calidades = await getCalidadesModelos();
   const tamaños = await getTamañosModelos();
   const pedidos = await getPedidos();
+  const impresionesFiltradas = filterDataForImpresiones(impresiones);
+
   const extraData = [modelos, calidades, tamaños, pedidos];
   if (session?.user) {
     return (
       <div className="min-w-full max-w-dvw">
         <Tabla
-          data={impresiones}
+          data={impresionesFiltradas}
           extraData={extraData}
           nombreTabla="Impresiones"
         ></Tabla>

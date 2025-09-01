@@ -82,7 +82,7 @@ export const getComprasInsumos = async function () {
   const { data, error } = await supabase
     .from("compras_insumos")
     .select(
-      "id, cantidad, precio_unitario, descuento,total, numero_factura, fecha_compra, insumoId, insumos(nombre_insumo, unidad_medida, caracteristica,  categoria_insumo:categoria_de_insumos(nombre_categoria_insumo), marca_insumo:marca_de_insumos(nombre_marca_insumo))"
+      "id, cantidad, precio_unitario, descuento,total, numero_factura, fecha_compra, insumoId, insumos(nombre_insumo,proveedorId, proveedor:proveedor(razon_social), unidad_medida, caracteristica,  categoria_insumo:categoria_de_insumos(nombre_categoria_insumo), marca_insumo:marca_de_insumos(nombre_marca_insumo))"
     )
     .order("id");
 
@@ -120,7 +120,7 @@ export const getModelos = async function () {
     console.error(error.message);
     throw new Error("Modelos could not be loaded");
   }
-  console.log(data, "en server");
+  // console.log(data, "en server");
   return data;
 };
 export const getTamañosModelos = async function () {

@@ -1,5 +1,6 @@
 import Tabla from "../_components/Tabla";
 import { auth } from "../_lib/auth";
+import { filterDataForCompras } from "../_lib/auxiliar";
 import { getComprasInsumos } from "../_lib/data-service";
 
 export const metadata = {
@@ -11,9 +12,11 @@ async function page() {
   const compras = await getComprasInsumos();
   if (!session?.user) return null;
 
+  const comprasFiltradas = filterDataForCompras(compras);
+  console.log(comprasFiltradas);
   return (
     <div>
-      <Tabla data={compras} nombreTabla={"Compras Insumos"}></Tabla>
+      <Tabla data={comprasFiltradas} nombreTabla={"Compras Insumos"}></Tabla>
     </div>
   );
 }

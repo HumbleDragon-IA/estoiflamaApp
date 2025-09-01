@@ -3,7 +3,7 @@ const compareString = (string, arr) => {
   return arr.some((value) => value === string);
 };
 
-const nombreTablas = ["modelo", "categoria", "impresion", "cliente", "insumos"];
+const nombreTablas = ["impresion", "insumos"];
 
 export function generateTableData(array, nombreTabla) {
   // reccorrer el array y separar las keys como headers viendo si tiene mas objetos adentro
@@ -94,4 +94,94 @@ export function formatPrecio(numero, locale = "es-AR") {
     // currency: moneda,
     minimumFractionDigits: 2,
   }).format(numero);
+}
+
+export function filterDataForImpresiones(data) {
+  const newData = data.map((dat) => {
+    return {
+      id: dat.id,
+      modelo: dat.modelo.nombre_modelo,
+      modeloId: dat.modeloId,
+      categoria_modelo: dat.modelo.categoria.nombre_categoria_modelo,
+      calidad: dat.calidad.calidad,
+      calidadId: dat.calidadId,
+      tamaño: dat.tamaño.tamaño,
+      tamañoId: dat.tamañoId,
+      tiempo: dat.tiempo_impresion,
+      cantidad: dat.cantidades_por_impresion,
+    };
+  });
+
+  return newData;
+}
+
+export function filterDataForModelos(data) {
+  const newData = data.map((dat) => {
+    return {
+      id: dat.id,
+      nombre: dat.nombre_modelo,
+      categoriaId: dat.categoria.categoriaId,
+      categoria: dat.categoria.nombre_categoria_modelo,
+    };
+  });
+
+  return newData;
+}
+
+export function filterDataForVentas(data) {
+  const newData = data.map((dat) => {
+    return {
+      id: dat.id,
+      clienteId: dat.clienteId,
+      cliente: dat.cliente.nombre_cliente,
+      impresionId: dat.impresionId,
+      modelo: dat.impresion.modelo.nombre_modelo,
+      calidad: dat.impresion.calidad.calidad,
+      tamaño: dat.impresion.tamaño.tamaño,
+      cantidad: dat.cantidad,
+      precio_unitario: formatPrecio(dat.precio_unitario_final),
+      total: formatPrecio(dat.precio_total_venta),
+      fecha: parseFecha(dat.fecha_entrega),
+      obs: dat.observaciones,
+    };
+  });
+
+  return newData;
+}
+export function filterDataForCompras(data) {
+  console.log(data, "EN FILTER antes de filtrar");
+
+  const newData = data.map((dat) => {
+    return {
+      id: dat.id,
+      insumoId: dat.insumoId,
+      nombre:
+        `${
+          dat.insumos.categoria_insumo.nombre_categoria_insumo === "Filamento"
+            ? dat.insumos.nombre_insumo.slice(0, 3)
+            : dat.insumos.nombre_insumo
+        }` +
+        " - " +
+        dat.insumos.marca_insumo.nombre_marca_insumo +
+        " - " +
+        `${
+          dat.insumos.categoria_insumo.nombre_categoria_insumo === "Filamento"
+            ? "color: " + dat.insumos.caracteristica.split(" ")[1]
+            : dat.insumos.caracteristica
+        }`,
+      cantidad: dat.cantidad + " " + dat.insumos.unidad_medida,
+      fecha: parseFecha(dat.fecha_compra),
+      factura: dat.numero_factura,
+      precio_unitario: formatPrecio(dat.precio_unitario),
+      total: formatPrecio(dat.total),
+      proveedor: dat.insumos.proveedor.razon_social,
+    };
+  });
+
+  return newData;
+}
+export function parseFecha(fecha) {
+  // fecha viene en formato "YYYY-MM-DD"
+  const [year, month, day] = fecha.split("-");
+  return `${day}-${month}-${year}`;
 }
