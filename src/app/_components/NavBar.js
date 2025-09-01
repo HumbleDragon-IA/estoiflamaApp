@@ -42,12 +42,12 @@ function NavBar({ user }) {
   if (!user) return null;
 
   return (
-    <div className="relative">
+    <div className="relative w-full">
       {/* Botón mobile */}
       <button
         ref={btnRef}
         type="button"
-        className="xl:hidden p-0.5 md:p-1.5  rounded border text-xs border-zinc-300 dark:border-zinc-700 "
+        className="lg:hidden p-2 rounded border text-sm border-zinc-300 dark:border-zinc-700"
         aria-expanded={open ? "true" : "false"}
         aria-controls="mobile-menu"
         onClick={() => setOpen((v) => !v)}
@@ -56,7 +56,7 @@ function NavBar({ user }) {
       </button>
 
       {/* Links desktop */}
-      <nav className="hidden xl:flex gap-8 items-center">
+      <nav className="hidden lg:flex gap-8 items-center">
         <Link className="hover:underline" href="/impresiones">
           Impresiones
         </Link>

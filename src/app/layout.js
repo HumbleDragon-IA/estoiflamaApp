@@ -33,7 +33,7 @@ export default function RootLayout({ children }) {
         bg-background text-foreground font-sans antialiased  `}
       >
         <Header />
-        <main className="container mx-auto min-w-dvw sm:px-6 lg:px-4 py-6 w-md sm:w-lg md:w-2xl lg:w-4xl xl:w-7xl  ">
+        <main className="container mx-auto max-w-dvw  min-w-full sm:px-6 lg:px-4 py-6  ">
           {children}
         </main>
         <Footer />
