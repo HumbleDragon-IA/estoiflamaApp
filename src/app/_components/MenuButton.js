@@ -138,14 +138,16 @@ export default function MenuButton({
               )}
             {option.toLowerCase() === "ver detalle" &&
               nombreTabla.toLowerCase() === "impresiones" && (
-                <Tabla
-                  data={filterDetalleGastoByImpresionId(
-                    rowData.id,
-                    detalleFilamentos
-                  )}
-                  nombreTabla={"Detalle Gastos"}
-                  detalleInsumos={detalleInsumos}
-                ></Tabla>
+                <div className="min-w-full max-w-dvw ">
+                  <Tabla
+                    data={filterDetalleGastoByImpresionId(
+                      rowData.id,
+                      detalleFilamentos
+                    )}
+                    nombreTabla={"Detalle Gastos"}
+                    detalleInsumos={detalleInsumos}
+                  ></Tabla>
+                </div>
               )}
             {option.toLowerCase() === "registrar detalle" &&
               nombreTabla.toLowerCase() === "impresiones" && (
