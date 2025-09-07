@@ -1,16 +1,29 @@
 "use client";
 import ActionButton from "./ActionButton";
 import { createImpresionAction } from "../_lib/actions";
-import { useActionState, useEffect, useState } from "react";
+import { useActionState, useEffect, useCallback } from "react";
 
 const initialState = { ok: false, error: null };
 
-function CrearImpresionForm({ open, onClose, extraData }) {
+function CrearImpresionForm({
+  open,
+  onClose,
+  extraData,
+  isEditing = false,
+  editData,
+  id = null,
+}) {
+  const actionWithArgs = useCallback(
+    (prevState, formData) =>
+      createImpresionAction(prevState, formData, isEditing, id),
+    [isEditing, id]
+  );
+  console.log(editData, "AAAAAA");
   const [state, formAction, isPending] = useActionState(
-    createImpresionAction,
+    actionWithArgs,
     initialState
   );
-  const [modelos, calidades, tamaños, pedidos] = extraData;
+  const [modelos, calidades, tamaños, pedidos, insumos] = extraData;
 
   useEffect(() => {
     if (state.ok) onClose();
@@ -35,7 +48,7 @@ function CrearImpresionForm({ open, onClose, extraData }) {
         <select
           id="modelo"
           name="modelo"
-          defaultValue=""
+          defaultValue={isEditing ? editData.modeloId : ""}
           className="max-w-full py-2 shadow-lg shadow-stone-800 text-stone-800"
           required
         >
@@ -56,7 +69,7 @@ function CrearImpresionForm({ open, onClose, extraData }) {
         <select
           id="tamaño"
           name="tamaño"
-          defaultValue=""
+          defaultValue={isEditing ? editData.tamañoId : ""}
           className="max-w-full py-2 shadow-lg shadow-stone-800 text-stone-800"
           required
         >
@@ -77,7 +90,7 @@ function CrearImpresionForm({ open, onClose, extraData }) {
         <select
           id="calidad"
           name="calidad"
-          defaultValue=""
+          defaultValue={isEditing ? editData.calidadId : ""}
           className="max-w-full py-2 shadow-lg shadow-stone-800 text-stone-800"
           required
         >
@@ -117,7 +130,7 @@ function CrearImpresionForm({ open, onClose, extraData }) {
           id="cantidad"
           name="cantidad"
           type="number"
-          defaultValue={0}
+          defaultValue={isEditing ? editData.cantidad : 0}
           min={0}
           className="bg-stone-200 text-stone-700 max-w-full py-2 px-3 rounded-2xl shadow-lg shadow-stone-800"
           required
@@ -133,7 +146,7 @@ function CrearImpresionForm({ open, onClose, extraData }) {
           id="tiempo_impresion"
           name="tiempo_impresion"
           type="number"
-          defaultValue={0}
+          defaultValue={isEditing ? editData.tiempo : 0}
           min={0}
           className="bg-stone-200 text-stone-700 max-w-full py-2 px-3 rounded-2xl shadow-lg shadow-stone-800"
           required
@@ -145,7 +158,9 @@ function CrearImpresionForm({ open, onClose, extraData }) {
           Cancelar
         </ActionButton>
         <ActionButton type="primary" isSubmit>
-          {isPending ? "Registrando..." : "Registrar"}
+          {isPending
+            ? `${isEditing ? "Editando..." : "Registrando"}`
+            : `${isEditing ? "Editar" : "Registrar"}`}
         </ActionButton>
       </div>
     </form>

@@ -13,7 +13,6 @@ async function page() {
   if (!session?.user) return null;
 
   const comprasFiltradas = filterDataForCompras(compras);
-  console.log(comprasFiltradas);
   return (
     <div>
       <Tabla data={comprasFiltradas} nombreTabla={"Compras Insumos"}></Tabla>

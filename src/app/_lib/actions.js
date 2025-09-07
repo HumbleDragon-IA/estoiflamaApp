@@ -1,8 +1,8 @@
 "use server";
 
 import { auth, signIn, signOut } from "./auth";
-import { createImpresion, createModelo } from "./data-service";
-import { supabase } from "./supabase";
+import { createRegister, deleteRegister, updateRegister } from "./data-service";
+
 import { revalidatePath } from "next/cache";
 
 export async function signInAction() {
@@ -15,7 +15,63 @@ export async function signOutAction() {
   await signOut({ redirectTo: "/" });
 }
 
-export async function createImpresionAction(prevState, formData) {
+export async function getDetalleGastosByImpresionIdAction(id) {
+  const session = await auth();
+  if (!session) return { ok: false, error: "Tenes que estar logueado" };
+
+  // const { data, error } = await getDetalleGastosByImpresionId(id);
+
+  if (error) return { ok: false, error: "No se pudo obtener el detalle" };
+
+  return data;
+}
+
+export async function createRegistroGastoFilamentoAction(
+  prevState,
+  formData,
+  isEditing,
+  id
+) {
+  const session = await auth();
+  if (!session) return { ok: false, error: "Tenes que estar logueado" };
+
+  const filamentoId = Number(formData.get("filamento"));
+  const impresionId = Number(formData.get("impresion"));
+  const costo_modelo = Number(formData.get("modelo"));
+  const costo_soporte = Number(formData.get("soporte"));
+  const costo_expulsado = Number(formData.get("expulsado"));
+  const costo_torre = Number(formData.get("torre"));
+
+  const newRegistro = {
+    filamentoId,
+    impresionId,
+    costo_modelo,
+    costo_soporte,
+    costo_expulsado,
+    costo_torre,
+  };
+
+  if (!filamentoId || !impresionId) {
+    return { ok: false, error: "No se pudo crear el registro" };
+  }
+
+  if (!isEditing) {
+    await createRegister(newRegistro, "tabla_detalle_gasto_filamento");
+  } else {
+    await updateRegister(id, newRegistro, "tabla_detalle_gasto_filamento");
+  }
+
+  revalidatePath("/impresiones");
+
+  return { ok: true, error: null };
+}
+
+export async function createImpresionAction(
+  prevState,
+  formData,
+  isEditing,
+  id
+) {
   const session = await auth();
   if (!session) return { ok: false, error: "Tenés que estar logueado." };
 
@@ -40,7 +96,11 @@ export async function createImpresionAction(prevState, formData) {
     return { ok: false, error: "No se pudo crear la impresion" };
   }
 
-  await createImpresion(newImpresion);
+  if (!isEditing) {
+    await createRegister(newImpresion, "impresiones");
+  } else {
+    await updateRegister(id, newImpresion, "impresiones");
+  }
   revalidatePath("/impresiones");
   // TODO: persistir en tu DB...
   return { ok: true, error: null };
@@ -49,7 +109,6 @@ export async function createImpresionAction(prevState, formData) {
 export async function createModeloAction(prevState, formData) {
   const session = await auth();
   if (!session) return { ok: false, error: "Tenés que estar logueado." };
-  console.log(formData, "FORMDATA EN SERVER");
   const nombre_modelo = String(formData.get("nombre"));
   const categoriaId = Number(formData.get("categoria"));
   const fuente = String(formData.get("fuente"));
@@ -67,9 +126,24 @@ export async function createModeloAction(prevState, formData) {
     return { ok: false, error: "No se pudo crear el modelo" };
   }
 
-  await createModelo(newModelo);
+  await createRegister(newModelo, "modelos");
   revalidatePath("/modelos");
 
   // TODO: persistir en tu DB...
   return { ok: true, error: null };
+}
+
+export async function deleteAction(keyword, id) {
+  const session = await auth();
+
+  if (!session) throw new Error("No estas autorizado");
+  await deleteRegister(
+    `${
+      keyword.toLowerCase() === "detalle gastos"
+        ? "tabla_detalle_gasto_filamento"
+        : keyword
+    }`,
+    id
+  );
+  revalidatePath(`/${keyword}`);
 }

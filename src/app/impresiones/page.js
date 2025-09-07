@@ -1,11 +1,16 @@
 import Tabla from "../_components/Tabla";
 import { auth } from "../_lib/auth";
-import { filterDataForImpresiones } from "../_lib/auxiliar";
 import {
+  filterDataForImpresiones,
+  filterDetalleGastoByImpresionId,
+} from "../_lib/auxiliar";
+import {
+  getAllDetalleGastos,
   getCalidadesModelos,
   getImpresiones,
   getModelos,
   getPedidos,
+  getStocks,
   getTamañosModelos,
 } from "../_lib/data-service";
 
@@ -20,16 +25,20 @@ async function page() {
   const calidades = await getCalidadesModelos();
   const tamaños = await getTamañosModelos();
   const pedidos = await getPedidos();
+  const insumos = await getStocks();
+  const allDetalleGastos = await getAllDetalleGastos();
   const impresionesFiltradas = filterDataForImpresiones(impresiones);
+  const extraData = [modelos, calidades, tamaños, pedidos, insumos];
 
-  const extraData = [modelos, calidades, tamaños, pedidos];
   if (session?.user) {
     return (
-      <div className="min-w-full max-w-dvw">
+      <div className="min-w-full max-w-dvw ">
         <Tabla
           data={impresionesFiltradas}
           extraData={extraData}
           nombreTabla="Impresiones"
+          detalleFilamentos={allDetalleGastos}
+          detalleInsumos={insumos}
         ></Tabla>
       </div>
     );

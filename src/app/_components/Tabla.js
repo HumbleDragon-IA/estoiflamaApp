@@ -1,76 +1,53 @@
 "use client";
 import { useState } from "react";
 import { generateTableData } from "../_lib/auxiliar";
-import ActionButton from "./ActionButton";
 import TableHeaders from "./TableHeaders";
-import TableRow from "./TableRow";
-import CrearImpresionForm from "./CrearImpresionForm";
-import Modal from "./Modal";
-import CrearModeloForm from "./CrearModeloForm";
 
-function Tabla({ data, nombreTabla, extraData }) {
-  const { headers3: headers, row2: rows } = generateTableData(data);
+import TableBody from "./TableBody";
+import TableTitle from "./TableTitle";
+import TableModal from "./TableModal";
+
+function Tabla({
+  data,
+  nombreTabla,
+  extraData = [],
+  detalleFilamentos,
+  detalleInsumos,
+}) {
+  const { headers3: headers } = generateTableData(data);
+
   const [open, setOpen] = useState(false);
+
+  if (data.length === 0) return <div>No hay {nombreTabla} ingresados</div>;
 
   return (
     <div className="flex flex-col items-center mx-auto px-1 justify-between gap-4 bg-background text-foreground font-sans antialiased min-w-full max-w-dvw  ">
-      <div className="flex flex-row justify-between items-center mx-auto min-w-full  max-w-dvw  mb-2 ">
-        <h2 className="text-sm lg:text-lg">Tabla de {nombreTabla}</h2>
-        <div className="">
-          {nombreTabla === "Impresiones" && !open && (
-            <ActionButton onClick={() => setOpen(true)} type="primary">
-              Registrar Impresion
-            </ActionButton>
-          )}
-          {nombreTabla === "Modelos" && !open && (
-            <ActionButton onClick={() => setOpen(true)} type="primary">
-              Agregar Modelo
-            </ActionButton>
-          )}
-        </div>
-      </div>
-      {nombreTabla === "Impresiones" && open && (
-        <Modal
-          open={open}
-          title="Crear Impresion"
-          onClose={() => setOpen(false)}
-        >
-          <CrearImpresionForm
-            extraData={extraData}
-            open={open}
-            onClose={() => setOpen(false)}
-          ></CrearImpresionForm>
-        </Modal>
-      )}
-
-      {nombreTabla === "Modelos" && open && (
-        <Modal
-          open={open}
-          title={"Registrar Modelo"}
-          onClose={() => setOpen(false)}
-        >
-          <CrearModeloForm
-            extraData={extraData}
-            open={open}
-            onClose={() => setOpen(false)}
-          ></CrearModeloForm>
-        </Modal>
-      )}
+      <TableTitle
+        nombreTabla={nombreTabla}
+        open={open}
+        setOpen={setOpen}
+      ></TableTitle>
+      <TableModal
+        extraData={extraData}
+        nombreTabla={nombreTabla}
+        open={open}
+        setOpen={setOpen}
+      ></TableModal>
       <table
-        className={`table-auto border-spacing-3 max-w-dvw  min-w-full border-stone-300 border-collapse border-2  ${
+        className={`table-auto border-spacing-3 max-w-dvw  min-w-full border-stone-300 border-collapse border-2   ${
           open && "hidden"
         }`}
       >
-        <thead className="border-b-2 ">
-          <TableHeaders headers={headers}></TableHeaders>
-        </thead>
-        <tbody>
-          {rows.map((row, i) => {
-            return (
-              <TableRow row={row} headers={headers} key={row.id}></TableRow>
-            );
-          })}
-        </tbody>
+        <TableHeaders headers={headers}></TableHeaders>
+
+        <TableBody
+          data={data}
+          headers={headers}
+          nombreTabla={nombreTabla}
+          extraData={extraData}
+          detalleFilamentos={detalleFilamentos}
+          detalleInsumos={detalleInsumos}
+        ></TableBody>
       </table>
     </div>
   );

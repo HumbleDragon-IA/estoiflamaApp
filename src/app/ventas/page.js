@@ -11,7 +11,6 @@ async function page() {
   const session = await auth();
   const ventas = await getVentas();
   const ventasFiltradas = filterDataForVentas(ventas);
-  console.log(ventasFiltradas);
   return (
     <div>
       <Tabla data={ventasFiltradas} nombreTabla={"Ventas"}></Tabla>

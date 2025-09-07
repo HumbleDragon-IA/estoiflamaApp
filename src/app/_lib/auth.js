@@ -11,14 +11,12 @@ const authConfig = {
   ],
   callbacks: {
     authorized({ auth, request }) {
-      console.log(auth, "EN CALLBACK");
       return !!auth?.user;
     },
     async signIn({ user, account, profile }) {
       try {
-        console.log("Entre a sign in");
         const existingUser = await getUser(user.email);
-        console.log(existingUser);
+
         if (!existingUser) {
           return false;
         }

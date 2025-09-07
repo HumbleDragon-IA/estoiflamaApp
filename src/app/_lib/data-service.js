@@ -1,8 +1,6 @@
 import { supabase } from "./supabase.js";
 import { auth } from "./auth.js";
 //GET
-// const session = await auth();
-// console.log(session);
 
 export async function getUser(email) {
   const { data, error } = await supabase
@@ -51,8 +49,7 @@ export const getImpresiones = async function () {
   const { data, error } = await supabase
     .from("impresiones")
     .select(
-      "modelo: modelos(categoriaId,nombre_modelo ,categoria:categoria_modelos( nombre_categoria_modelo)) ,id, tiempo_impresion, cantidades_por_impresion, modeloId, tamañoId,calidadId, tamaño:tamaño_enum( tamaño) , calidad: calidad_enum( calidad)"
-      //  modelo: modelos(categoriaId,nombre ,categoria:categoriaModelos(id, nombre)), materialesUtilizados:tableDetalleGastoFilamento(id,filamentoId,modelo, filamento: insumos(id, codigo, nombre,caracteristica,unidadMedida, proveedorId, marcaId, categoriaId,categoria:categoriaDeInsumos(id, nombre) ,proveedor:proveedor(id, razonSocial),marca: marcaDeInsumos(id,nombre)))  "
+      "modelo: modelos(categoriaId,nombre_modelo ,categoria:categoria_modelos( nombre_categoria_modelo)) ,id, tiempo_impresion, cantidades_por_impresion, modeloId, tamañoId,calidadId, tamaño:tamaño_enum( tamaño) , calidad: calidad_enum( calidad), detalleGastos: tabla_detalle_gasto_filamento(filamentoId, costo_modelo)"
     )
     .order("id");
 
@@ -60,7 +57,7 @@ export const getImpresiones = async function () {
     console.error(error.message);
     throw new Error("Cabins could not be loaded");
   }
-  // console.log(JSON.stringify(data, null, 4), "QONDA ACA");
+
   return data;
 };
 
@@ -97,7 +94,7 @@ export const getStocks = async function () {
   const { data, error } = await supabase
     .from("insumos")
     .select(
-      "id, caracteristica, stock, proveedorId, marcaId, categoriaId, codigo_insumo, nombre_insumo"
+      "id, caracteristica, stock, proveedorId, marcaId, categoriaId, categoriaInsumo:categoria_de_insumos(nombre_categoria_insumo), codigo_insumo, nombre_insumo"
     )
     .order("id");
 
@@ -120,7 +117,6 @@ export const getModelos = async function () {
     console.error(error.message);
     throw new Error("Modelos could not be loaded");
   }
-  // console.log(data, "en server");
   return data;
 };
 export const getTamañosModelos = async function () {
@@ -133,7 +129,7 @@ export const getTamañosModelos = async function () {
     console.error(error.message);
     throw new Error("tamaños could not be loaded");
   }
-  // console.log(data, "en server");
+
   return data;
 };
 
@@ -147,7 +143,7 @@ export const getCalidadesModelos = async function () {
     console.error(error.message);
     throw new Error("calidades could not be loaded");
   }
-  // console.log(data, "en server");
+
   return data;
 };
 
@@ -161,7 +157,7 @@ export const getCategoriasModelos = async function () {
     console.error(error.message);
     throw new Error("Categorias Modelos could not be loaded");
   }
-  // console.log(data, "en server");
+
   return data;
 };
 
@@ -175,49 +171,57 @@ export const getPedidos = async function () {
     console.error(error.message);
     throw new Error("pedidos could not be loaded");
   }
-  // console.log(data, "en server");
+
   return data;
 };
 
-//POST
-// getImpresiones();
-// // console.log("hola");
-// // getImpresionbyModeloId(1);
-// getImpresionbyId(2);
-// getImpresionbyId(3);
-
-export async function createImpresion(newImpresion) {
+export const getAllDetalleGastos = async function () {
   const { data, error } = await supabase
-    .from("impresiones")
-    .insert([newImpresion]);
-  console.log(newImpresion, " aver como viene");
-  if (error) {
-    console.error(error.message);
-    throw new Error("Impresion could not be created");
-  }
-  console.log(data);
-  return data;
-}
-export async function createModelo(newModelo) {
-  const { data, error } = await supabase.from("modelos").insert([newModelo]);
-  console.log(newModelo, " aver como viene el modelo en data services");
-  if (error) {
-    console.error(error.message);
-    throw new Error("Modelo could not be created");
-  }
-  console.log(data, "modelo en service");
-  return data;
-}
+    .from("tabla_detalle_gasto_filamento")
+    .select(
+      "id, impresionId, costo_modelo, costo_soporte, costo_expulsado, costo_torre, filamento:insumos(caracteristica, nombre_insumo)"
+    );
 
-export async function createDetalleGastos(detalleGastos) {
-  const { data, error } = await supabase
-    .from("tableDetalleGastoFilamento")
-    .insert(detalleGastos);
-  console.log(error);
+  if (error) {
+    console.error(error);
+  }
+  return data;
+};
+
+export async function createRegister(newData, table) {
+  const { data, error } = await supabase.from(table).insert(newData);
   if (error) {
     console.error(error.message);
     throw new Error("Guest could not be created");
   }
-  console.log(data, "LA DATA ES");
+
+  return data;
+}
+
+export async function updateRegister(id, updatedImpresion, keyword) {
+  const { data, error } = await supabase
+    .from(`${keyword}`)
+    .update(updatedImpresion)
+    .eq("id", id)
+    .select()
+    .single();
+
+  if (error) {
+    console.log(error.message);
+    throw new Error("no se pudo actualizar");
+  }
+
+  return data;
+}
+
+///////////////////DELETE//////////////////////
+
+export async function deleteRegister(keyword, id) {
+  const { data, error } = await supabase.from(keyword).delete().eq("id", id);
+
+  if (error) {
+    console.error(error);
+    throw new Error(`${keyword} no se pudo eliminar`);
+  }
   return data;
 }
