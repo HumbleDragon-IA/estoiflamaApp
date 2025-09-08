@@ -53,9 +53,9 @@ function CrearCompraForm({
           <option value="" disabled>
             — Elegí —
           </option>
-          {insumos.map((i) => {
+          {insumos.map((i, ind) => {
             return (
-              <option key={i.id + i.nombre} value={i.id}>
+              <option key={i.id + i.nombre + ind} value={i.id}>
                 {i.categoria_insumo +
                   " " +
                   i.nombre +

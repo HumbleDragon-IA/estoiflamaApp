@@ -1,7 +1,13 @@
 "use server";
 
 import { auth, signIn, signOut } from "./auth";
-import { createRegister, deleteRegister, updateRegister } from "./data-service";
+import {
+  createRegister,
+  deleteRegister,
+  getCompraById,
+  getInsumoById,
+  updateRegister,
+} from "./data-service";
 
 import { revalidatePath } from "next/cache";
 
@@ -93,11 +99,23 @@ export async function createCompraAction(prevState, formData, isEditing, id) {
   if (!insumoId) {
     return { ok: false, error: "No se pudo crear la compra" };
   }
-
+  let compra;
   if (!isEditing) {
-    await createRegister(newCompra, "compras_insumos");
+    compra = await createRegister(newCompra, "compras_insumos");
   } else {
     await updateRegister(id, newCompra, "compras_insumos");
+  }
+
+  if (compra) {
+    const insumoAActualizar = await getInsumoById(compra.insumoId);
+    updateRegister(
+      compra.insumoId,
+      {
+        ...insumoAActualizar,
+        stock: insumoAActualizar.stock + newCompra.cantidad,
+      },
+      "insumos"
+    );
   }
   revalidatePath("/compras");
   // TODO: persistir en tu DB...
@@ -115,7 +133,7 @@ export async function createInsumosAction(prevState, formData, isEditing, id) {
   const codigo_insumo = String(formData.get("codigoInsumo"));
   const nombre_insumo = String(formData.get("nombreInsumo"));
   const unidad_medida = String(formData.get("unidadMedida"));
-  const stock = Number(formData.get("stockInicial"));
+  // const stock = Number(formData.get("stockInicial"));
 
   const newInsumo = {
     caracteristica,
@@ -125,7 +143,7 @@ export async function createInsumosAction(prevState, formData, isEditing, id) {
     codigo_insumo,
     nombre_insumo,
     unidad_medida,
-    stock,
+    stock: 0,
   };
   if (!proveedorId || !marcaId || !categoriaId) {
     return { ok: false, error: "No se pudo crear el insumo" };
@@ -212,6 +230,27 @@ export async function deleteAction(keyword, id) {
   const session = await auth();
 
   if (!session) throw new Error("No estas autorizado");
+
+  if (keyword === "compras") {
+    const compra = await getCompraById(id);
+
+    const insumo = await getInsumoById(compra.insumoId);
+
+    const actualizado = await updateRegister(
+      compra.insumoId,
+      {
+        ...insumo,
+        stock: insumo.stock - compra.cantidad,
+      },
+      "insumos"
+    );
+
+    if (!actualizado)
+      throw new Error(
+        "No se pudo actualizar el stock antes de eliminar la compra"
+      );
+  }
+
   await deleteRegister(
     `${
       keyword.toLowerCase() === "detalle gastos"

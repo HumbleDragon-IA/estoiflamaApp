@@ -159,7 +159,7 @@ function CrearInsumoForm({
         />
       </div>
 
-      <div className="space-y-2 flex flex-col max-w-full">
+      {/* <div className="space-y-2 flex flex-col max-w-full">
         <label htmlFor="stockInicial">Stock inicial</label>
         <input
           id="stockInicial"
@@ -172,7 +172,7 @@ function CrearInsumoForm({
           className="bg-stone-200 text-stone-700 max-w-full py-2 px-3 rounded-2xl shadow-lg shadow-stone-800"
           required
         />
-      </div>
+      </div> */}
       <div className="flex justify-end gap-4 pt-4 max-w-full">
         <ActionButton type="cancel" onClick={onClose}>
           Cancelar

@@ -29,6 +29,38 @@ export async function getImpresionbyId(id) {
   return data;
 }
 
+export async function getInsumoById(id) {
+  const { data, error } = await supabase
+    .from("insumos")
+    .select(
+      "id, stock,caracteristica,proveedorId,marcaId,categoriaId,codigo_insumo,nombre_insumo, unidad_medida"
+    )
+    .eq("id", id)
+    .single();
+
+  if (error) {
+    console.error(error);
+  }
+
+  return data;
+}
+
+export async function getCompraById(id) {
+  const { data, error } = await supabase
+    .from("compras_insumos")
+    .select(
+      "id, insumoId, cantidad, descuento, total,precio_unitario, sub_total, numero_factura, fecha_compra"
+    )
+    .eq("id", id)
+    .single();
+
+  if (error) {
+    console.error(error);
+  }
+
+  return data;
+}
+
 export async function getImpresionbyModeloId(modeloId) {
   const { data, error } = await supabase
     .from("impresiones")
@@ -233,7 +265,11 @@ export const getProveedores = async function () {
 };
 
 export async function createRegister(newData, table) {
-  const { data, error } = await supabase.from(table).insert(newData);
+  const { data, error } = await supabase
+    .from(table)
+    .insert(newData)
+    .select()
+    .single();
   if (error) {
     console.error(error.message);
     throw new Error("Guest could not be created");
@@ -251,7 +287,7 @@ export async function updateRegister(id, updatedImpresion, keyword) {
     .single();
 
   if (error) {
-    console.log(error.message);
+    console.error(error.message);
     throw new Error("no se pudo actualizar");
   }
 
