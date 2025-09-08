@@ -66,8 +66,8 @@ function NavBar({ user }) {
         <Link className="hover:underline" href="/ventas">
           Ventas
         </Link>
-        <Link className="hover:underline" href="/stocks">
-          Stocks
+        <Link className="hover:underline" href="/insumos">
+          Insumos
         </Link>
         <Link className="hover:underline" href="/compras">
           Compras
@@ -99,8 +99,8 @@ function NavBar({ user }) {
             <Link className="py-2 hover:opacity-80" href="/ventas">
               Ventas
             </Link>
-            <Link className="py-2 hover:opacity-80" href="/stocks">
-              Stocks
+            <Link className="py-2 hover:opacity-80" href="/insumos">
+              Insumos
             </Link>
             <Link className="py-2 hover:opacity-80" href="/compras">
               Compras

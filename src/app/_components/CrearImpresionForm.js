@@ -157,7 +157,7 @@ function CrearImpresionForm({
         <ActionButton type="cancel" onClick={onClose}>
           Cancelar
         </ActionButton>
-        <ActionButton type="primary" isSubmit>
+        <ActionButton type="primary" isSubmit isPending={isPending}>
           {isPending
             ? `${isEditing ? "Editando..." : "Registrando"}`
             : `${isEditing ? "Editar" : "Registrar"}`}

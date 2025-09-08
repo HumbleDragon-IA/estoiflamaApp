@@ -1,11 +1,12 @@
 "use client";
-import ActionButton from "./ActionButton";
-import { createRegistroGastoFilamentoAction } from "../_lib/actions";
-import { useActionState, useEffect, useCallback } from "react";
 
+import ActionButton from "./ActionButton";
+import { createCompraAction } from "../_lib/actions";
+import { useActionState, useEffect, useCallback } from "react";
+import { invertParseFecha } from "../_lib/auxiliar";
 const initialState = { ok: false, error: null };
 
-function CrearRegistroGastoForm({
+function CrearCompraForm({
   open,
   onClose,
   extraData,
@@ -15,7 +16,7 @@ function CrearRegistroGastoForm({
 }) {
   const actionWithArgs = useCallback(
     (prevState, formData) =>
-      createRegistroGastoFilamentoAction(prevState, formData, isEditing, id),
+      createCompraAction(prevState, formData, isEditing, id),
     [isEditing, id]
   );
 
@@ -23,9 +24,7 @@ function CrearRegistroGastoForm({
     actionWithArgs,
     initialState
   );
-  console.log(extraData, isEditing, "EXTRA DATA EN CREAR REGISTRO GASTO");
-  const insumos = extraData;
-
+  const [insumos] = extraData;
   useEffect(() => {
     if (state.ok) onClose();
   }, [state.ok, onClose]);
@@ -42,13 +41,12 @@ function CrearRegistroGastoForm({
         </p>
       )}
 
-      {/* MODELO */}
       <div className="space-y-2 flex flex-col max-w-full">
-        <label htmlFor="modelo">Selecciona el Filamento</label>
+        <label htmlFor="insumo">Selecciona el Insumo</label>
         <select
-          id="filamento"
-          name="filamento"
-          defaultValue={isEditing ? editData.filamentoId : ""}
+          id="insumo"
+          name="insumo"
+          defaultValue={isEditing ? editData.insumoId : ""}
           className="max-w-full py-2 shadow-lg shadow-stone-800 text-stone-800"
           required
         >
@@ -56,56 +54,30 @@ function CrearRegistroGastoForm({
             — Elegí —
           </option>
           {insumos.map((i) => {
-            if (i.categoriaId === 1) {
-              return (
-                <option key={i.id + i.codigo_insumo} value={i.id}>
-                  {i.categoriaInsumo.nombre_categoria_insumo +
-                    " - " +
-                    i.caracteristica}
-                </option>
-              );
-            }
+            return (
+              <option key={i.id + i.nombre} value={i.id}>
+                {i.categoria_insumo +
+                  " " +
+                  i.nombre +
+                  " - " +
+                  i.caracteristica +
+                  " - " +
+                  i.marca}
+              </option>
+            );
           })}
         </select>
       </div>
 
-      <div className="hidden">
-        <input
-          type="hidden"
-          id="impresion"
-          name="impresion"
-          defaultValue={isEditing ? editData.impresionId : id}
-        ></input>
-      </div>
-
-      {/* CANTIDAD */}
       <div className="space-y-2 flex flex-col max-w-full">
-        <label htmlFor="cantidad">
-          Ingrese cantidad (grms) gastados en modelo
-        </label>
+        <label htmlFor="cantidad">Cantidad Comprada</label>
         <input
-          id="modelo"
-          name="modelo"
+          id="cantidad"
+          name="cantidad"
           type="number"
-          step="any"
-          defaultValue={isEditing ? editData.costo_modelo : 0}
           min={0}
-          className="bg-stone-200 text-stone-700 max-w-full py-2 px-3 rounded-2xl shadow-lg shadow-stone-800"
-          required
-        />
-      </div>
-      {/* CANTIDAD */}
-      <div className="space-y-2 flex flex-col max-w-full">
-        <label htmlFor="cantidad">
-          Ingrese cantidad (grms) gastados en soporte
-        </label>
-        <input
-          id="soporte"
-          name="soporte"
-          type="number"
-          step="any"
-          defaultValue={isEditing ? editData.costo_soporte : 0}
-          min={0}
+          defaultValue={isEditing ? editData.cantidad : ""}
+          placeholder="Ingrese cantidad comprada"
           className="bg-stone-200 text-stone-700 max-w-full py-2 px-3 rounded-2xl shadow-lg shadow-stone-800"
           required
         />
@@ -113,30 +85,55 @@ function CrearRegistroGastoForm({
 
       {/* CANTIDAD */}
       <div className="space-y-2 flex flex-col max-w-full">
-        <label htmlFor="cantidad">Ingrese cantidad (grms) expulsado</label>
+        <label htmlFor="descuento">Descuento</label>
         <input
-          id="expulsado"
-          name="expulsado"
+          id="descuento"
+          name="descuento"
           type="number"
           step="any"
-          defaultValue={isEditing ? editData.costo_expulsado : 0}
+          defaultValue={isEditing ? editData.descuento : ""}
+          placeholder="Ingrese el % de descuento"
           min={0}
+          className="bg-stone-200 text-stone-700 max-w-full py-2 px-3 rounded-2xl shadow-lg shadow-stone-800"
+          required
+        />
+      </div>
+      <div className="space-y-2 flex flex-col max-w-full">
+        <label htmlFor="precioUnitario">Precio Unitario</label>
+        <input
+          id="precioUnitario"
+          name="precioUnitario"
+          type="number"
+          step="any"
+          min={0}
+          defaultValue={isEditing ? editData.precio_unitario : ""}
+          placeholder="Ingrese el precio unitario"
           className="bg-stone-200 text-stone-700 max-w-full py-2 px-3 rounded-2xl shadow-lg shadow-stone-800"
           required
         />
       </div>
       {/* CANTIDAD */}
       <div className="space-y-2 flex flex-col max-w-full">
-        <label htmlFor="cantidad">
-          Ingrese cantidad (grms) gastados en torre
-        </label>
+        <label htmlFor="factura">Numero Factura</label>
         <input
-          id="torre"
-          name="torre"
-          type="number"
-          step="any"
-          defaultValue={isEditing ? editData.costo_torre : 0}
-          min={0}
+          id="factura"
+          name="factura"
+          type="text"
+          defaultValue={isEditing ? editData.factura : ""}
+          placeholder="Ingrese Numero de factura"
+          className="bg-stone-200 text-stone-700 max-w-full py-2 px-3 rounded-2xl shadow-lg shadow-stone-800"
+          required
+        />
+      </div>
+      {/* CANTIDAD */}
+      <div className="space-y-2 flex flex-col max-w-full">
+        <label htmlFor="fecha">Fecha Compra</label>
+        <input
+          id="fecha"
+          name="fecha"
+          type="date"
+          defaultValue={isEditing ? invertParseFecha(editData.fecha) : ""}
+          placeholder="Seleccione la fecha"
           className="bg-stone-200 text-stone-700 max-w-full py-2 px-3 rounded-2xl shadow-lg shadow-stone-800"
           required
         />
@@ -155,4 +152,4 @@ function CrearRegistroGastoForm({
   );
 }
 
-export default CrearRegistroGastoForm;
+export default CrearCompraForm;

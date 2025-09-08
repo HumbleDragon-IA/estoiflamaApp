@@ -13,7 +13,7 @@ export default function Modal({ open, title, onClose, children }) {
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 z-50">
+    <div className="fixed inset-0 z-50 ">
       <div
         className="absolute inset-0 bg-black/50 backdrop-blur-sm"
         onClick={onClose}
@@ -21,11 +21,11 @@ export default function Modal({ open, title, onClose, children }) {
       <div
         role="dialog"
         aria-modal="true"
-        className="absolute left-1/2 top-1/2  -translate-x-1/2 -translate-y-1/2
-                   rounded-2xl bg-stone-700 p-6 shadow-2xl w-md sm:w-lg md:w-2xl lg:w-4xl xl:w-6xl "
+        className="absolute left-1/2 top-1/2  -translate-x-1/2 -translate-y-1/2 
+                   rounded-2xl bg-stone-700 p-6 shadow-2xl min-w-full max-w-dvw "
       >
         {title && (
-          <h2 className="mb-4 text-xl font-semibold text-white">{title}</h2>
+          <h2 className="mb-4 text-xl font-semibold text-white ">{title}</h2>
         )}
         {children}
       </div>

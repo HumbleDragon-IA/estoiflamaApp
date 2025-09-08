@@ -19,7 +19,6 @@ function Tabla({
   const [open, setOpen] = useState(false);
 
   if (data.length === 0) return <div>No hay {nombreTabla} ingresados</div>;
-
   return (
     <div className="flex flex-col items-center mx-auto px-1 justify-between gap-4 bg-background text-foreground font-sans antialiased min-w-full max-w-dvw  ">
       <TableTitle

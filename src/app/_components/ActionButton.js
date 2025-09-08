@@ -1,6 +1,6 @@
 "use client";
 
-function ActionButton({ children, type, onClick, isSubmit }) {
+function ActionButton({ children, type, onClick, isSubmit, isPending }) {
   const primary = "bg-green-700  shadow-green-900";
   const secondary = "bg-stone-400 shadow-red-900";
   const cancel = "bg-red-400";
@@ -23,7 +23,7 @@ function ActionButton({ children, type, onClick, isSubmit }) {
 
   if (isSubmit) {
     return (
-      <button type="submit" className={classes}>
+      <button type="submit" disabled={isPending} className={classes}>
         {children}
       </button>
     );

@@ -10,7 +10,8 @@ import { deleteAction } from "../_lib/actions";
 import CrearRegistroGastoForm from "./CrearRegistroGastoForm";
 import Tabla from "./Tabla";
 import { filterDetalleGastoByImpresionId } from "../_lib/auxiliar";
-
+import CrearInsumoForm from "./CrearInsumoForm";
+import CrearCompraForm from "./CrearCompraForm";
 const ITEM_HEIGHT = 48;
 
 export default function MenuButton({
@@ -183,6 +184,37 @@ export default function MenuButton({
                 editData={rowData}
                 id={rowData.id}
               ></CrearRegistroGastoForm>
+            </Modal>
+          )}
+        {option.toLowerCase() === "editar" &&
+          nombreTabla.toLowerCase() === "insumos" &&
+          modalOpen &&
+          !isPending && (
+            <Modal open title={nombreTabla} onClose={handleClose}>
+              <CrearInsumoForm
+                open
+                onClose={handleClose}
+                extraData={extraData}
+                isEditing={true}
+                editData={rowData}
+                id={rowData.id}
+              ></CrearInsumoForm>
+            </Modal>
+          )}
+
+        {option.toLowerCase() === "editar" &&
+          nombreTabla.toLowerCase() === "compras" &&
+          modalOpen &&
+          !isPending && (
+            <Modal open title={nombreTabla} onClose={handleClose}>
+              <CrearCompraForm
+                open
+                onClose={handleClose}
+                extraData={extraData}
+                isEditing={true}
+                editData={rowData}
+                id={rowData.id}
+              ></CrearCompraForm>
             </Modal>
           )}
 

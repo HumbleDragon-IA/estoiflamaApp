@@ -85,7 +85,7 @@ function CrearModeloForm({ open, onClose, extraData }) {
         <ActionButton type="cancel" onClick={onClose}>
           Cancelar
         </ActionButton>
-        <ActionButton type="primary" isSubmit>
+        <ActionButton type="primary" isSubmit isPending={isPending}>
           {isPending ? "Registrando..." : "Registrar"}
         </ActionButton>
       </div>

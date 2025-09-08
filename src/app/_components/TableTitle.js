@@ -15,6 +15,16 @@ function TableTitle({ nombreTabla, open, setOpen }) {
             Agregar Modelo
           </ActionButton>
         )}
+        {nombreTabla === "Insumos" && !open && (
+          <ActionButton onClick={() => setOpen(true)} type="primary">
+            Agregar nuevo insumo
+          </ActionButton>
+        )}
+        {nombreTabla === "Compras" && !open && (
+          <ActionButton onClick={() => setOpen(true)} type="primary">
+            Registrar nueva compra
+          </ActionButton>
+        )}
       </div>
     </div>
   );

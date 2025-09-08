@@ -66,6 +66,81 @@ export async function createRegistroGastoFilamentoAction(
   return { ok: true, error: null };
 }
 
+export async function createCompraAction(prevState, formData, isEditing, id) {
+  const session = await auth();
+  if (!session) return { ok: false, error: "Tenés que estar logueado." };
+
+  const insumoId = Number(formData.get("insumo"));
+  const cantidad = Number(formData.get("cantidad"));
+  const descuento = Number(formData.get("descuento"));
+  const precio_unitario = Number(formData.get("precioUnitario"));
+  const numero_factura = String(formData.get("factura"));
+  const fecha_compra = formData.get("fecha");
+
+  const newCompra = {
+    insumoId,
+    cantidad,
+    descuento,
+    precio_unitario,
+    numero_factura,
+    fecha_compra,
+    sub_total: precio_unitario * cantidad,
+    total:
+      precio_unitario * cantidad -
+      precio_unitario * cantidad * (descuento / 100),
+  };
+
+  if (!insumoId) {
+    return { ok: false, error: "No se pudo crear la compra" };
+  }
+
+  if (!isEditing) {
+    await createRegister(newCompra, "compras_insumos");
+  } else {
+    await updateRegister(id, newCompra, "compras_insumos");
+  }
+  revalidatePath("/compras");
+  // TODO: persistir en tu DB...
+  return { ok: true, error: null };
+}
+
+export async function createInsumosAction(prevState, formData, isEditing, id) {
+  const session = await auth();
+  if (!session) return { ok: false, error: "Tenés que estar logueado." };
+
+  const caracteristica = String(formData.get("caracteristica"));
+  const proveedorId = Number(formData.get("proveedor"));
+  const marcaId = Number(formData.get("marca"));
+  const categoriaId = Number(formData.get("categoria"));
+  const codigo_insumo = String(formData.get("codigoInsumo"));
+  const nombre_insumo = String(formData.get("nombreInsumo"));
+  const unidad_medida = String(formData.get("unidadMedida"));
+  const stock = Number(formData.get("stockInicial"));
+
+  const newInsumo = {
+    caracteristica,
+    proveedorId,
+    marcaId,
+    categoriaId,
+    codigo_insumo,
+    nombre_insumo,
+    unidad_medida,
+    stock,
+  };
+  if (!proveedorId || !marcaId || !categoriaId) {
+    return { ok: false, error: "No se pudo crear el insumo" };
+  }
+
+  if (!isEditing) {
+    await createRegister(newInsumo, "insumos");
+  } else {
+    await updateRegister(id, newInsumo, "insumos");
+  }
+  revalidatePath("/insumos");
+  // TODO: persistir en tu DB...
+  return { ok: true, error: null };
+}
+
 export async function createImpresionAction(
   prevState,
   formData,
@@ -141,6 +216,8 @@ export async function deleteAction(keyword, id) {
     `${
       keyword.toLowerCase() === "detalle gastos"
         ? "tabla_detalle_gasto_filamento"
+        : keyword.toLowerCase() === "compras"
+        ? "compras_insumos"
         : keyword
     }`,
     id

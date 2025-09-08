@@ -36,7 +36,7 @@ export default async function RootLayout({ children }) {
       >
         <Header />
         <main
-          className={`container mx-auto max-w-dvw min-h-full  max-h-dvh min-w-full sm:px-6 lg:px-4 ${
+          className={`container mx-auto max-w-dvw   min-w-full sm:px-6 lg:px-4 ${
             session?.user ? "py-6" : ""
           } `}
         >

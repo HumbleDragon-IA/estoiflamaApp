@@ -1,4 +1,6 @@
+import CrearCompraForm from "./CrearCompraForm";
 import CrearImpresionForm from "./CrearImpresionForm";
+import CrearInsumoForm from "./CrearInsumoForm";
 import CrearModeloForm from "./CrearModeloForm";
 import Modal from "./Modal";
 
@@ -29,6 +31,32 @@ function TableModal({ extraData, nombreTabla, open, setOpen }) {
             open={open}
             onClose={() => setOpen(false)}
           ></CrearModeloForm>
+        </Modal>
+      )}
+      {nombreTabla === "Insumos" && open && (
+        <Modal
+          open={open}
+          title={"Registrar nuevo insumo"}
+          onClose={() => setOpen(false)}
+        >
+          <CrearInsumoForm
+            extraData={extraData}
+            open={open}
+            onClose={() => setOpen(false)}
+          ></CrearInsumoForm>
+        </Modal>
+      )}
+      {nombreTabla === "Compras" && open && (
+        <Modal
+          open={open}
+          title={"Registrar Nueva Compra"}
+          onClose={() => setOpen(false)}
+        >
+          <CrearCompraForm
+            extraData={extraData}
+            open={open}
+            onClose={() => setOpen(false)}
+          ></CrearCompraForm>
         </Modal>
       )}
     </div>

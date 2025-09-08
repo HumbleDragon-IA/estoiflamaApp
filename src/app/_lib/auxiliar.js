@@ -71,6 +71,24 @@ export function filterDataForDetalleGastos(data) {
   return newData;
 }
 
+export function filterDataForInsumos(data) {
+  const newData = data.map((dat) => {
+    return {
+      id: dat.id,
+      categoriaId: dat.categoriaId,
+      codigo: dat.codigo_insumo,
+      nombre: dat.nombre_insumo,
+      marca: dat.marca_de_insumos.nombre_marca_insumo,
+      caracteristica: dat.caracteristica,
+      categoria_insumo: dat.categoriaInsumo.nombre_categoria_insumo,
+      stock: dat.stock,
+      unidadMedida: dat.unidad_medida,
+    };
+  });
+
+  return newData;
+}
+
 export function filterDataForModelos(data) {
   const newData = data.map((dat) => {
     return {
@@ -109,6 +127,7 @@ export function filterDataForCompras(data) {
     return {
       id: dat.id,
       insumoId: dat.insumoId,
+      fecha: parseFecha(dat.fecha_compra),
       nombre:
         `${
           dat.insumos.categoria_insumo.nombre_categoria_insumo === "Filamento"
@@ -123,11 +142,11 @@ export function filterDataForCompras(data) {
             ? "color: " + dat.insumos.caracteristica.split(" ")[1]
             : dat.insumos.caracteristica
         }`,
-      cantidad: dat.cantidad + " " + dat.insumos.unidad_medida,
-      fecha: parseFecha(dat.fecha_compra),
+      cantidad: dat.cantidad,
+      precio_unitario: dat.precio_unitario,
+      descuento: dat.descuento,
+      total: dat.total,
       factura: dat.numero_factura,
-      precio_unitario: formatPrecio(dat.precio_unitario),
-      total: formatPrecio(dat.total),
       proveedor: dat.insumos.proveedor.razon_social,
     };
   });
@@ -138,4 +157,24 @@ export function parseFecha(fecha) {
   // fecha viene en formato "YYYY-MM-DD"
   const [year, month, day] = fecha.split("-");
   return `${day}-${month}-${year}`;
+}
+
+export function invertParseFecha(val) {
+  const s = String(val).trim();
+
+  // ISO con hora -> recortamos
+  if (/^\d{4}-\d{2}-\d{2}T/.test(s)) return s.slice(0, 10);
+
+  // ISO puro
+  if (/^\d{4}-\d{2}-\d{2}$/.test(s)) return s;
+
+  // dd-mm-yyyy o dd/mm/yyyy
+  const m1 = s.match(/^(\d{1,2})[-\/](\d{1,2})[-\/](\d{4})$/);
+  if (m1) {
+    const [, dd, mm, yyyy] = m1;
+    return `${yyyy}-${String(mm).padStart(2, "0")}-${String(dd).padStart(
+      2,
+      "0"
+    )}`;
+  }
 }

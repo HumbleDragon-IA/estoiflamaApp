@@ -94,7 +94,7 @@ export const getStocks = async function () {
   const { data, error } = await supabase
     .from("insumos")
     .select(
-      "id, caracteristica, stock, proveedorId, marcaId, categoriaId, categoriaInsumo:categoria_de_insumos(nombre_categoria_insumo), codigo_insumo, nombre_insumo"
+      "id, caracteristica, stock, proveedorId, marcaId, categoriaId, unidad_medida, categoriaInsumo:categoria_de_insumos(nombre_categoria_insumo), codigo_insumo, nombre_insumo, marca_de_insumos(nombre_marca_insumo)"
     )
     .order("id");
 
@@ -185,6 +185,50 @@ export const getAllDetalleGastos = async function () {
   if (error) {
     console.error(error);
   }
+  return data;
+};
+
+export const getCategoriasInsumos = async function () {
+  const { data, error } = await supabase
+    .from("categoria_de_insumos")
+    .select("id, nombre_categoria_insumo")
+    .order("id");
+
+  if (error) {
+    console.error(error.message);
+    throw new Error("categorias could not be loaded");
+  }
+
+  return data;
+};
+
+export const getMarcasInsumos = async function () {
+  const { data, error } = await supabase
+    .from("marca_de_insumos")
+    .select("id, nombre_marca_insumo")
+    .order("id");
+
+  if (error) {
+    console.error(error.message);
+    throw new Error("marcas could not be loaded");
+  }
+
+  return data;
+};
+
+export const getProveedores = async function () {
+  const { data, error } = await supabase
+    .from("proveedor")
+    .select(
+      "id,cuit, categoria, telefono, email,domicilio,razon_social, persona_contacto"
+    )
+    .order("id");
+
+  if (error) {
+    console.error(error.message);
+    throw new Error("proveedores could not be loaded");
+  }
+
   return data;
 };
 
