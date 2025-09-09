@@ -12,6 +12,8 @@ import Tabla from "./Tabla";
 import { filterDetalleGastoByImpresionId } from "../_lib/auxiliar";
 import CrearInsumoForm from "./CrearInsumoForm";
 import CrearCompraForm from "./CrearCompraForm";
+import Icons from "./Icons";
+import CrearModeloForm from "./CrearModeloForm";
 const ITEM_HEIGHT = 48;
 
 export default function MenuButton({
@@ -89,14 +91,25 @@ export default function MenuButton({
           open={open}
           onClose={handleClose}
           slotProps={{
-            paper: { style: { maxHeight: ITEM_HEIGHT * 4.5, width: "20ch" } },
+            paper: {
+              style: {
+                maxHeight:
+                  ITEM_HEIGHT * (options.length + options.length * 0.25),
+                width: "25ch",
+              },
+            },
             list: { "aria-labelledby": "long-button" },
           }}
         >
           {options.map((opt) => (
-            <MenuItem key={opt} onClick={() => handleSelect(opt)}>
+            <MenuItem
+              key={opt + Math.random()}
+              onClick={() => handleSelect(opt)}
+            >
               {!isPending ? (
-                opt
+                <Icons key={opt} label={opt.split(" ").join("")}>
+                  {opt}
+                </Icons>
               ) : (
                 <span>
                   <SpinnerMini />
@@ -147,6 +160,7 @@ export default function MenuButton({
                     )}
                     nombreTabla={"Detalle Gastos"}
                     detalleInsumos={detalleInsumos}
+                    options={["Editar", "Eliminar"]}
                   ></Tabla>
                 </div>
               )}
@@ -215,6 +229,22 @@ export default function MenuButton({
                 editData={rowData}
                 id={rowData.id}
               ></CrearCompraForm>
+            </Modal>
+          )}
+
+        {option.toLowerCase() === "editar" &&
+          nombreTabla.toLowerCase() === "modelos" &&
+          modalOpen &&
+          !isPending && (
+            <Modal open title={nombreTabla} onClose={handleClose}>
+              <CrearModeloForm
+                open
+                onClose={handleClose}
+                extraData={extraData}
+                isEditing={true}
+                editData={rowData}
+                id={rowData.id}
+              ></CrearModeloForm>
             </Modal>
           )}
 

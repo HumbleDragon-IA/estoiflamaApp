@@ -8,6 +8,7 @@ function TableRow({
   extraData,
   detalleFilamentos,
   detalleInsumos,
+  options,
 }) {
   return (
     <tr className="text-center border-b-1 odd:bg-stone-800 even:bg-stone-700  ">
@@ -18,12 +19,7 @@ function TableRow({
               <TableData key={row[header] + i}>{row[header]}</TableData>
               <TableData key={row[header] + "menu"}>
                 <MenuButton
-                  options={[
-                    "Editar",
-                    "Eliminar",
-                    "Ver Detalle",
-                    "Registrar Detalle",
-                  ]}
+                  options={options}
                   rowData={row}
                   nombreTabla={nombreTabla}
                   extraData={extraData}

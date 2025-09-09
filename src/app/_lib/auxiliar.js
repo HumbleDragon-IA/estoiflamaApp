@@ -96,6 +96,8 @@ export function filterDataForModelos(data) {
       nombre: dat.nombre_modelo,
       categoriaId: dat.categoria.categoriaId,
       categoria: dat.categoria.nombre_categoria_modelo,
+      fuente: dat.fuente,
+      url: dat.url_link,
     };
   });
 

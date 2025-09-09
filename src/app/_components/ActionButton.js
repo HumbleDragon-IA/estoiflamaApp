@@ -13,7 +13,7 @@ function ActionButton({ children, type, onClick, isSubmit, isPending }) {
       : type === "cancel"
       ? cancel
       : ""
-  } text-sm p-2 rounded-full shadow-md`;
+  } text-sm sm:text-md md:text-xl lg:text-xl p-2 rounded-full shadow-md hover:cursor-pointer`;
 
   function handleAction(e) {
     e.preventDefault();

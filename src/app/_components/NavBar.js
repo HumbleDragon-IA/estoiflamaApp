@@ -57,18 +57,10 @@ function NavBar({ user }) {
 
       {/* Links desktop */}
       <nav className="hidden lg:flex gap-8 items-center">
-        <Link className="hover:underline" href="/impresiones">
-          Impresiones
-        </Link>
-        <Link className="hover:underline" href="/modelos">
-          Modelos
-        </Link>
         <Link className="hover:underline" href="/ventas">
           Ventas
         </Link>
-        <Link className="hover:underline" href="/insumos">
-          Insumos
-        </Link>
+
         <Link className="hover:underline" href="/compras">
           Compras
         </Link>
@@ -90,18 +82,10 @@ function NavBar({ user }) {
           aria-modal="true"
         >
           <div className="px-4 sm:px-6 lg:px-8 py-3 flex flex-col gap-3">
-            <Link className="py-2 hover:opacity-80" href="/impresiones">
-              Impresiones
-            </Link>
-            <Link className="py-2 hover:opacity-80" href="/modelos">
-              Modelos
-            </Link>
             <Link className="py-2 hover:opacity-80" href="/ventas">
               Ventas
             </Link>
-            <Link className="py-2 hover:opacity-80" href="/insumos">
-              Insumos
-            </Link>
+
             <Link className="py-2 hover:opacity-80" href="/compras">
               Compras
             </Link>

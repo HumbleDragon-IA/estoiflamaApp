@@ -58,6 +58,19 @@ function TableModal({ extraData, nombreTabla, open, setOpen }) {
             onClose={() => setOpen(false)}
           ></CrearCompraForm>
         </Modal>
+      )}{" "}
+      {nombreTabla === "Ventas" && open && (
+        <Modal
+          open={open}
+          title={"Registrar Nueva Venta"}
+          onClose={() => setOpen(false)}
+        >
+          <CrearCompraForm
+            extraData={extraData}
+            open={open}
+            onClose={() => setOpen(false)}
+          ></CrearCompraForm>
+        </Modal>
       )}
     </div>
   );

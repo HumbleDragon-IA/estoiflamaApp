@@ -141,7 +141,7 @@ export const getModelos = async function () {
   const { data, error } = await supabase
     .from("modelos")
     .select(
-      "id, nombre_modelo, categoriaId, categoria:categoria_modelos(nombre_categoria_modelo)"
+      "id, nombre_modelo, categoriaId,fuente,url_link, categoria:categoria_modelos(nombre_categoria_modelo)"
     )
     .order("id");
 

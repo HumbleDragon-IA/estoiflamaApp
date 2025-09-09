@@ -7,6 +7,7 @@ function TableBody({
   extraData,
   detalleFilamentos = [],
   detalleInsumos,
+  options,
 }) {
   return (
     <tbody>
@@ -20,6 +21,7 @@ function TableBody({
             extraData={extraData}
             detalleFilamentos={detalleFilamentos}
             detalleInsumos={detalleInsumos}
+            options={options}
           ></TableRow>
         );
       })}

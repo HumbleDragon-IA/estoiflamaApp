@@ -4,13 +4,19 @@ import { createModeloAction } from "../_lib/actions";
 import { useActionState, useEffect } from "react";
 const initialState = { ok: false, error: null };
 
-function CrearModeloForm({ open, onClose, extraData }) {
+function CrearModeloForm({
+  open,
+  onClose,
+  extraData,
+  isEditing = false,
+  editData,
+  id = null,
+}) {
   const [state, formAction, isPending] = useActionState(
     createModeloAction,
     initialState
   );
   const [categorias] = extraData;
-  console.log(categorias, "EN FORM");
   useEffect(() => {
     if (state.ok) onClose();
   }, [state.ok, onClose]);
@@ -30,12 +36,13 @@ function CrearModeloForm({ open, onClose, extraData }) {
 
       {/* nombre modelo */}
       <div className="space-y-2 flex flex-col max-w-full">
-        <label htmlFor="nombre">Ingresá el nombre del modelo</label>
+        <label htmlFor="nombre">Nombre del modelo</label>
         <input
           id="nombre"
           name="nombre"
-          defaultValue=""
-          className=" py-2 shadow-lg shadow-stone-800 text-stone-800 max-w-full"
+          defaultValue={isEditing ? editData.nombre : ""}
+          placeholder="Ingresa Nombre del modelo"
+          className=" py-2 shadow-lg shadow-stone-800 text-stone-800 max-w-full pl-2"
           required
         />
       </div>
@@ -46,32 +53,34 @@ function CrearModeloForm({ open, onClose, extraData }) {
         <input
           id="fuente"
           name="fuente"
-          defaultValue=""
-          className="py-2 shadow-lg shadow-stone-800 text-stone-800 max-w-full"
+          defaultValue={isEditing ? editData.fuente : ""}
+          placeholder="Ingresa la fuente del modelo"
+          className="py-2 shadow-lg shadow-stone-800 text-stone-800 max-w-full  pl-2"
           required
         />
       </div>
 
       {/* url modelo */}
       <div className="space-y-2 flex flex-col max-w-full">
-        <label htmlFor="url">Ingresá la Url del modelo</label>
+        <label htmlFor="url">URL/Link del Modelo</label>
         <input
           id="url"
           name="url"
-          defaultValue=""
-          className="py-2 shadow-lg shadow-stone-800 text-stone-800 max-w-full"
+          defaultValue={isEditing ? editData.url : ""}
+          placeholder="Ingresa la URL o Link del modelo"
+          className="py-2 shadow-lg shadow-stone-800 text-stone-800 max-w-full  pl-2"
           required
         />
       </div>
 
       {/* Categoria modelo */}
       <div className="space-y-2 flex flex-col max-w-full">
-        <label htmlFor="categoria">Seleccioná la categoria del modelo</label>
+        <label htmlFor="categoria">Categoria del modelo</label>
         <select
           id="categoria"
           name="categoria"
           defaultValue="0"
-          className="py-2 shadow-lg shadow-stone-800 text-stone-800 max-w-full"
+          className="py-2 shadow-lg shadow-stone-800 text-stone-800 max-w-full  pl-2"
         >
           {categorias.map((c) => (
             <option key={c.id} value={c.id}>
