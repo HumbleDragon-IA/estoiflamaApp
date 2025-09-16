@@ -1,7 +1,6 @@
 import Image from "next/image";
 
 function ModelImage({ model }) {
-  console.log(model, "EL MODELO");
   if (!model?.image_url) return null;
   return (
     <Image

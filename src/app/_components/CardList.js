@@ -7,7 +7,7 @@ import ModelImage from "./ModelImage";
 
 function CardList({ array, nombreTabla }) {
   return (
-    <div className="pt-6 flex flex-col gap-2">
+    <div className="pt-6 flex flex-col max-w-dvw gap-2">
       {array.map((impresion) => (
         <Card
           key={impresion.id}

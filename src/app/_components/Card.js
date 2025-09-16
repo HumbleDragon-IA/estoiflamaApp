@@ -11,7 +11,7 @@ async function Card({ impresion, nombreTabla, options }) {
   // console.log(impresion, "LA IMPRESON");
 
   return (
-    <div className="bg-stone-800 flex flex-col w-xl  px-4 py-6 rounded-xl mx-auto gap-4 mb-2 border-2 shadow-md/80 shadow-stone-300 hover:shadow-2xl hover:shadow-stone-100">
+    <div className="bg-stone-800 flex flex-col w-md 2xl:w-6xl xl:w-2xl max-w-dvw px-4 py-6 rounded-xl mx-auto gap-4 mb-2 border-2 shadow-md/80 shadow-stone-300 hover:shadow-2xl hover:shadow-stone-100 ">
       <CardHeader impresion={impresion}>
         <CardTitle>{impresion.modelo.nombre_modelo}</CardTitle>
         <MenuButton2
