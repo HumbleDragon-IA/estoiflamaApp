@@ -6,7 +6,9 @@ import {
   deleteRegister,
   getCompraById,
   getInsumoById,
+  getModeloById,
   updateRegister,
+  uploadModelImage,
 } from "./data-service";
 
 import { revalidatePath } from "next/cache";
@@ -99,25 +101,93 @@ export async function createCompraAction(prevState, formData, isEditing, id) {
   if (!insumoId) {
     return { ok: false, error: "No se pudo crear la compra" };
   }
-  let compra;
+  let compraCreada;
+  const insumoDeCompra = await getInsumoById(insumoId);
+  let nuevoStock;
   if (!isEditing) {
-    compra = await createRegister(newCompra, "compras_insumos");
+    compraCreada = await createRegister(newCompra, "compras_insumos");
   } else {
+    const compraAnterior = await getCompraById(id);
+    if (compraAnterior.cantidad !== newCompra.cantidad) {
+      nuevoStock = newCompra.cantidad - compraAnterior.cantidad;
+    }
+    console.log(
+      "ENTRE EN EL EDIT ACTION ",
+      insumoDeCompra.stock,
+      "STOCK DEL INSUMO",
+      nuevoStock,
+      "stock a actualizar"
+    );
+    // Si el stock es 0
+    // Si la cantidad a editar es<0
+    if (insumoDeCompra.stock + nuevoStock < 0) {
+      throw new Error("El stock no puede ser menor a 0");
+    }
     await updateRegister(id, newCompra, "compras_insumos");
   }
 
-  if (compra) {
-    const insumoAActualizar = await getInsumoById(compra.insumoId);
-    updateRegister(
-      compra.insumoId,
-      {
-        ...insumoAActualizar,
-        stock: insumoAActualizar.stock + newCompra.cantidad,
-      },
-      "insumos"
-    );
+  const insumoUpdated = await updateRegister(
+    insumoId,
+    {
+      ...insumoDeCompra,
+      stock: !isEditing
+        ? insumoDeCompra.stock + newCompra.cantidad
+        : insumoDeCompra.stock + nuevoStock,
+    },
+    "insumos"
+  );
+  if (!insumoUpdated) {
+    throw new Error("No se pudo actualizar el stock del insumo de la compra");
   }
+
+  // if (compraCreada) {
+  //   const insumoAActualizar = await getInsumoById(compra.insumoId);
+  //   updateRegister(
+  //     compra.insumoId,
+  //     {
+  //       ...insumoAActualizar,
+  //       stock: insumoAActualizar.stock + newCompra.cantidad,
+  //     },
+  //     "insumos"
+  //   );
+  // }
   revalidatePath("/compras");
+  // TODO: persistir en tu DB...
+  return { ok: true, error: null };
+}
+
+export async function createVentaAction(prevState, formData, isEditing, id) {
+  const session = await auth();
+  if (!session) return { ok: false, error: "Tenés que estar logueado." };
+  const clienteId = Number(formData.get("cliente"));
+  const impresionId = Number(formData.get("impresion"));
+  const cantidad = Number(formData.get("cantidad"));
+  const observaciones = String(formData.get("observaciones"));
+  // const precio_unitario_sugerido = Number(
+  //   formData.get("precio_unitario_sugerido")
+  // );
+  // const precio_unitario_final = Number(formData.get("precio_unitario_final"));
+  const fecha_entrega = Date(formData.get("fecha_entrega"));
+  // const precio_unitario_sugerido = cotizarImpresion(impresionId);
+
+  const newVenta = {
+    clienteId,
+    impresionId,
+    cantidad,
+    observaciones,
+    precio_unitario_sugerido,
+    // precio_unitario_final: precio_unitario_final || 0,
+    precio_total_venta: precio_unitario_sugerido * cantidad,
+    fecha_entrega,
+  };
+
+  if (!isEditing) {
+    await createRegister(newVenta, "ventas");
+  } else {
+    await updateRegister(id, newVenta, "ventas");
+  }
+
+  revalidatePath("/ventas");
   // TODO: persistir en tu DB...
   return { ok: true, error: null };
 }
@@ -199,13 +269,15 @@ export async function createImpresionAction(
   return { ok: true, error: null };
 }
 
-export async function createModeloAction(prevState, formData) {
+export async function createModeloAction(prevState, formData, isEditing, id) {
   const session = await auth();
   if (!session) return { ok: false, error: "Tenés que estar logueado." };
+
   const nombre_modelo = String(formData.get("nombre"));
   const categoriaId = Number(formData.get("categoria"));
   const fuente = String(formData.get("fuente"));
   const url_link = String(formData.get("url"));
+  const image = formData.get("image");
 
   const newModelo = {
     nombre_modelo,
@@ -213,16 +285,27 @@ export async function createModeloAction(prevState, formData) {
     fuente,
     url_link,
   };
-  // createImpresion();
-  // Validaciones rápidas
   if (!categoriaId || !nombre_modelo) {
     return { ok: false, error: "No se pudo crear el modelo" };
   }
 
-  await createRegister(newModelo, "modelos");
-  revalidatePath("/modelos");
+  if (!isEditing) {
+    const modeloCreado = await createRegister(newModelo, "modelos");
+    const newModeloConImagen = await uploadModelImage(modeloCreado, image);
 
-  // TODO: persistir en tu DB...
+    await updateRegister(modeloCreado.id, newModeloConImagen, "modelos");
+  } else {
+    let modeloActualizar;
+    if (image.name === "undefined") {
+      modeloActualizar = newModelo;
+    } else {
+      modeloActualizar = await uploadModelImage(newModelo, image);
+    }
+
+    const elmodelospost = await updateRegister(id, modeloActualizar, "modelos");
+  }
+
+  revalidatePath("/modelos");
   return { ok: true, error: null };
 }
 
@@ -235,6 +318,9 @@ export async function deleteAction(keyword, id) {
     const compra = await getCompraById(id);
 
     const insumo = await getInsumoById(compra.insumoId);
+    if (insumo.stock - compra.cantidad < 0) {
+      throw new Error("El stock restante no puede ser menor a 0");
+    }
 
     const actualizado = await updateRegister(
       compra.insumoId,

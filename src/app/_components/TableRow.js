@@ -1,6 +1,7 @@
 import React from "react";
 import MenuButton from "./MenuButton";
 import TableData from "./TableData";
+import ModelImage from "./ModelImage";
 function TableRow({
   row,
   headers,
@@ -11,12 +12,16 @@ function TableRow({
   options,
 }) {
   return (
-    <tr className="text-center border-b-1 odd:bg-stone-800 even:bg-stone-700  ">
+    <tr className="text-center border-b-1 odd:bg-stone-800 even:bg-stone-700  min-w-full max-w-dvw ">
       {headers.map((header, i) => {
         if (headers.length - 1 === i) {
           return (
             <React.Fragment key={row.id + header}>
-              <TableData key={row[header] + i}>{row[header]}</TableData>
+              <TableData key={row[header] + i}>
+                {row[header]?.length >= 20
+                  ? row[header].slice(0, 19) + "..."
+                  : row[header]}
+              </TableData>
               <TableData key={row[header] + "menu"}>
                 <MenuButton
                   options={options}
@@ -31,7 +36,15 @@ function TableRow({
           );
         }
         if (header !== "id" && header.slice(-2) !== "Id") {
-          return <TableData key={row[header] + i}>{row[header]}</TableData>;
+          return (
+            <TableData key={row[header] + i}>
+              {header === "image_url" ? (
+                <ModelImage model={row}></ModelImage>
+              ) : (
+                row[header]
+              )}
+            </TableData>
+          );
         }
       })}
     </tr>

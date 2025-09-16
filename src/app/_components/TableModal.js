@@ -2,6 +2,7 @@ import CrearCompraForm from "./CrearCompraForm";
 import CrearImpresionForm from "./CrearImpresionForm";
 import CrearInsumoForm from "./CrearInsumoForm";
 import CrearModeloForm from "./CrearModeloForm";
+import CrearVentaForm from "./CrearVentaForm";
 import Modal from "./Modal";
 
 function TableModal({ extraData, nombreTabla, open, setOpen }) {
@@ -65,11 +66,11 @@ function TableModal({ extraData, nombreTabla, open, setOpen }) {
           title={"Registrar Nueva Venta"}
           onClose={() => setOpen(false)}
         >
-          <CrearCompraForm
+          <CrearVentaForm
             extraData={extraData}
             open={open}
             onClose={() => setOpen(false)}
-          ></CrearCompraForm>
+          ></CrearVentaForm>
         </Modal>
       )}
     </div>

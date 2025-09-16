@@ -1,5 +1,5 @@
 import { supabase } from "./supabase.js";
-import { auth } from "./auth.js";
+console.log();
 //GET
 
 export async function getUser(email) {
@@ -12,12 +12,14 @@ export async function getUser(email) {
   // No error here! We handle the possibility of no guest in the sign in callback
   return data;
 }
-
+export async function cotizarImpresion(impresionId) {
+  const impresion = await getImpresionbyId(impresionId);
+}
 export async function getImpresionbyId(id) {
   const { data, error } = await supabase
     .from("impresiones")
     .select(
-      "id,modelo: modelos(categoriaId,nombre_modelo ,categoria:categoria_modelos( nombre_categoria_modelo)) , tiempo_impresion, cantidades_por_impresion, modeloId, tamañoId,calidadId, tamaño:tamaño_enum( tamaño) , calidad: calidad_enum( calidad)"
+      "modelo: modelos(categoriaId,nombre_modelo,image_url,categoria:categoria_modelos( nombre_categoria_modelo)) ,id, tiempo_impresion, cantidades_por_impresion, modeloId, tamañoId,calidadId, tamaño:tamaño_enum( tamaño) , calidad: calidad_enum( calidad), detalleGastos: tabla_detalle_gasto_filamento(filamentoId, costo_modelo,costo_expulsado, costo_torre,costo_soporte, insumo:insumos(nombre_insumo, caracteristica))"
     )
     .eq("id", id)
     .single();
@@ -81,7 +83,7 @@ export const getImpresiones = async function () {
   const { data, error } = await supabase
     .from("impresiones")
     .select(
-      "modelo: modelos(categoriaId,nombre_modelo ,categoria:categoria_modelos( nombre_categoria_modelo)) ,id, tiempo_impresion, cantidades_por_impresion, modeloId, tamañoId,calidadId, tamaño:tamaño_enum( tamaño) , calidad: calidad_enum( calidad), detalleGastos: tabla_detalle_gasto_filamento(filamentoId, costo_modelo)"
+      "modelo: modelos(categoriaId,nombre_modelo,image_url,categoria:categoria_modelos( nombre_categoria_modelo)) ,id, tiempo_impresion, cantidades_por_impresion, modeloId, tamañoId,calidadId, tamaño:tamaño_enum( tamaño) , calidad: calidad_enum( calidad), detalleGastos: tabla_detalle_gasto_filamento(filamentoId, costo_modelo,costo_expulsado, costo_torre,costo_soporte, insumo:insumos(nombre_insumo, caracteristica))"
     )
     .order("id");
 
@@ -141,7 +143,7 @@ export const getModelos = async function () {
   const { data, error } = await supabase
     .from("modelos")
     .select(
-      "id, nombre_modelo, categoriaId,fuente,url_link, categoria:categoria_modelos(nombre_categoria_modelo)"
+      "id, nombre_modelo, categoriaId,fuente, image_url,url_link, categoria:categoria_modelos(nombre_categoria_modelo)"
     )
     .order("id");
 
@@ -160,6 +162,20 @@ export const getTamañosModelos = async function () {
   if (error) {
     console.error(error.message);
     throw new Error("tamaños could not be loaded");
+  }
+
+  return data;
+};
+
+export const getClientes = async function () {
+  const { data, error } = await supabase
+    .from("clientes")
+    .select("id, nombre_cliente, telefono, email, domicilio")
+    .order("id");
+
+  if (error) {
+    console.error(error.message);
+    throw new Error("Clientes could not be loaded");
   }
 
   return data;
@@ -292,6 +308,43 @@ export async function updateRegister(id, updatedImpresion, keyword) {
   }
 
   return data;
+}
+/////storage/v1/object/sign/model_images/models/
+//  avatar: `${supabaseUrl}/storage/v1/object/public/avatars/${fileName}`,
+
+export async function getModeloById(id) {
+  const { data, error } = await supabase
+    .from("modelos")
+    .select("*, categoria:categoria_modelos(nombre_categoria_modelo)")
+    .eq("id", id)
+    .single();
+
+  if (error) throw new Error(error.message);
+  console.log(data, "EN GET MODELO  BY ID");
+  return data;
+}
+
+export async function uploadModelImage(model, image) {
+  const safe = `${model.id}-${model.nombre_modelo}`.replace(/\s+/g, "_");
+  const fileName = `modelImage-${safe}-${Date.now()}`;
+  const path = `models/${fileName}`;
+
+  const { error: uploadErr } = await supabase.storage
+    .from("model_images")
+    .upload(path, image, {
+      contentType: image?.type || "image/webp",
+      upsert: false,
+    });
+
+  if (uploadErr) throw new Error(uploadErr.message);
+
+  const { data } = supabase.storage.from("model_images").getPublicUrl(path);
+
+  return {
+    ...model,
+    image_path: path,
+    image_url: data.publicUrl, // usás esto directo en <Image />
+  };
 }
 
 ///////////////////DELETE//////////////////////

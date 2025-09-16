@@ -1,4 +1,3 @@
-import { ChevronLeftIcon } from "@heroicons/react/24/solid";
 const compareString = (string, arr, nombreTabla = "") => {
   if (nombreTabla.toLowerCase() !== "detallegastos") {
     return arr.some((value) => value === string);
@@ -93,10 +92,11 @@ export function filterDataForModelos(data) {
   const newData = data.map((dat) => {
     return {
       id: dat.id,
-      nombre: dat.nombre_modelo,
-      categoriaId: dat.categoria.categoriaId,
+      nombre_modelo: dat.nombre_modelo,
+      categoriaId: dat.categoriaId,
       categoria: dat.categoria.nombre_categoria_modelo,
       fuente: dat.fuente,
+      image_url: dat.image_url,
       url: dat.url_link,
     };
   });

@@ -1,3 +1,4 @@
+"use client";
 import IconButton from "@mui/material/IconButton";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
@@ -17,14 +18,7 @@ import CrearModeloForm from "./CrearModeloForm";
 import CrearVentaForm from "./CrearVentaForm";
 const ITEM_HEIGHT = 48;
 
-export default function MenuButton({
-  options,
-  rowData,
-  nombreTabla,
-  extraData,
-  detalleFilamentos,
-  detalleInsumos,
-}) {
+export default function MenuButton2({ rowData, nombreTabla, options }) {
   const [anchorEl, setAnchorEl] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
   const [option, setOption] = useState("");
@@ -41,10 +35,10 @@ export default function MenuButton({
     setModalOpen(false);
     // si tu Modal maneja estado interno, que se cierre con esta prop
   }, []);
-
+  console.log(rowData, nombreTabla, options);
   const handleDelete = useCallback(async () => {
     const ok = window.confirm(
-      `¿Está seguro que desea eliminar la impresión de ${rowData.cantidad} ${rowData.modelo}?`
+      `¿Está seguro que desea eliminar la impresión de ${rowData.cantidades_por_impresion} ${rowData.modelo.nombre_modelo}?`
     );
     if (!ok) {
       handleClose();
